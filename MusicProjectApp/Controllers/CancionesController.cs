@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
+using System.Threading.Tasks;
 
 namespace MusicProjectApp.Controllers
 {
     public class CancionesController : Controller
     {
-        private readonly GrupoAContext _context;
+        private readonly IGenericRepositorio<Canciones> _cancionesRepo;
+        private readonly IGenericRepositorio<Albumes> _albumesRepo;
+        private readonly IGenericRepositorio<Artistas> _artistasRepo;
 
-        public CancionesController(GrupoAContext context)
+        public CancionesController(IGenericRepositorio<Canciones> cancionesRepo, IGenericRepositorio<Albumes> albumesRepo, IGenericRepositorio<Artistas> artistasRepo)
         {
-            _context = context;
+            _cancionesRepo = cancionesRepo;
+            _albumesRepo = albumesRepo;
+            _artistasRepo = artistasRepo;
         }
 
         // GET: Canciones
         public async Task<IActionResult> Index()
         {
-            var grupoAContext = _context.Canciones.Include(c => c.Album).Include(c => c.Artista);
-            return View(await grupoAContext.ToListAsync());
+            return View(await _cancionesRepo.DameTodos());
         }
 
         // GET: Canciones/Details/5
@@ -33,10 +33,7 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await _context.Canciones
-                .Include(c => c.Album)
-                .Include(c => c.Artista)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var canciones = await _cancionesRepo.DameUno(id.Value);
             if (canciones == null)
             {
                 return NotFound();
@@ -46,28 +43,25 @@ namespace MusicProjectApp.Controllers
         }
 
         // GET: Canciones/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["AlbumId"] = new SelectList(_context.Albumes, "Id", "Titulo");
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre");
+            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo");
+            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre");
             return View();
         }
 
         // POST: Canciones/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Titulo,ArtistaId,AlbumId")] Canciones canciones)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(canciones);
-                await _context.SaveChangesAsync();
+                await _cancionesRepo.Agregar(canciones);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albumes, "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", canciones.ArtistaId);
+            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -79,19 +73,17 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await _context.Canciones.FindAsync(id);
+            var canciones = await _cancionesRepo.DameUno(id.Value);
             if (canciones == null)
             {
                 return NotFound();
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albumes, "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", canciones.ArtistaId);
+            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
         // POST: Canciones/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,ArtistaId,AlbumId")] Canciones canciones)
@@ -105,12 +97,12 @@ namespace MusicProjectApp.Controllers
             {
                 try
                 {
-                    _context.Update(canciones);
-                    await _context.SaveChangesAsync();
+                    await _cancionesRepo.Modificar(id, canciones);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CancionesExists(canciones.Id))
+                    if (!(await CancionesExists(canciones.Id)))
                     {
                         return NotFound();
                     }
@@ -119,10 +111,9 @@ namespace MusicProjectApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albumes, "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", canciones.ArtistaId);
+            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -134,10 +125,7 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await _context.Canciones
-                .Include(c => c.Album)
-                .Include(c => c.Artista)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var canciones = await _cancionesRepo.DameUno(id.Value);
             if (canciones == null)
             {
                 return NotFound();
@@ -151,19 +139,14 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var canciones = await _context.Canciones.FindAsync(id);
-            if (canciones != null)
-            {
-                _context.Canciones.Remove(canciones);
-            }
-
-            await _context.SaveChangesAsync();
+            await _cancionesRepo.Borrar(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CancionesExists(int id)
+        private async Task<bool> CancionesExists(int id)
         {
-            return _context.Canciones.Any(e => e.Id == id);
+            var canciones = await _cancionesRepo.DameUno(id);
+            return canciones != null;
         }
     }
 }

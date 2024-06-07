@@ -1,45 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
+using System.Linq.Expressions;
 
 namespace MusicProjectApp.Controllers
 {
     public class ArtistasController : Controller
     {
-        private readonly GrupoAContext _context;
+        private readonly IGenericRepositorio<Artistas> _repo;
 
-        public ArtistasController(GrupoAContext context)
+        public ArtistasController(IGenericRepositorio<Artistas> repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         // GET: Artistas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Artistas.ToListAsync());
+            Expression<Func<Artistas, bool>> filterExpression;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                filterExpression = a => a.Nombre.Contains(searchString);
+            }
+            else
+            {
+                filterExpression = a => true;
+            }
+            var artista = await _repo.Filtra(filterExpression);
+
+            return View(artista);
         }
 
         // GET: Artistas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var artistas = await _context.Artistas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (artistas == null)
-            {
-                return NotFound();
-            }
+            Artistas artista = await _repo.DameUno(id.Value);
+            if (artista == null) return NotFound();
 
-            return View(artistas);
+            return View(artista);
         }
 
         // GET: Artistas/Create
@@ -49,88 +50,54 @@ namespace MusicProjectApp.Controllers
         }
 
         // POST: Artistas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Genero,Fecha")] Artistas artistas)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Genero,Fecha")] Artistas artista)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(artistas);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _repo.Agregar(artista);
+                return RedirectToAction("Index");
             }
-            return View(artistas);
+            return View(artista);
         }
 
         // GET: Artistas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var artistas = await _context.Artistas.FindAsync(id);
-            if (artistas == null)
-            {
-                return NotFound();
-            }
-            return View(artistas);
+            Artistas artista = await _repo.DameUno(id.Value);
+            if (artista == null) return NotFound();
+
+            return View(artista);
         }
 
         // POST: Artistas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Genero,Fecha")] Artistas artistas)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Genero,Fecha")] Artistas artista)
         {
-            if (id != artistas.Id)
-            {
-                return NotFound();
-            }
+            if (id != artista.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(artistas);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArtistasExists(artistas.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _repo.Modificar(artista.Id, artista);
+                return RedirectToAction("Index");
             }
-            return View(artistas);
+
+            return View(artista);
         }
 
         // GET: Artistas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var artistas = await _context.Artistas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (artistas == null)
-            {
-                return NotFound();
-            }
+            Artistas artista = await _repo.DameUno(id.Value);
+            if (artista == null) return NotFound();
 
-            return View(artistas);
+            return View(artista);
         }
 
         // POST: Artistas/Delete/5
@@ -138,19 +105,8 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var artistas = await _context.Artistas.FindAsync(id);
-            if (artistas != null)
-            {
-                _context.Artistas.Remove(artistas);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ArtistasExists(int id)
-        {
-            return _context.Artistas.Any(e => e.Id == id);
+            var artista = await _repo.Borrar(id);
+            return RedirectToAction("Index");
         }
     }
 }

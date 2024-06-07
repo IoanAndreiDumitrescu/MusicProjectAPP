@@ -7,6 +7,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<GrupoAContext>(
        options => options.UseSqlServer("server=musicagrupos.database.windows.net;database=GrupoA;user=as;password=P0t@t0P0t@t0"));
 builder.Services.AddScoped(typeof(IGenericRepositorio<>), typeof(EFGenericRepositorio<>));
+builder.Services.AddScoped<IGenericRepositorio<Canciones>, EFGenericRepositorio<Canciones>>();
+builder.Services.AddScoped<IGenericRepositorio<Artistas>, EFGenericRepositorio<Artistas>>();
+builder.Services.AddScoped<IGenericRepositorio<Albumes>, EFGenericRepositorio<Albumes>>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
