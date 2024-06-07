@@ -1,0 +1,66 @@
+﻿/* Universal settings */
+* {
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif; /* Adele often used Serif fonts */
+}
+
+body {
+    margin: 0;
+    background-color: #000; /* black background */
+    color: #fff !important; /* white text */
+}
+
+/* Container styling */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+    .table th,
+    .table td {
+        text-align: left;
+        padding: 10px;
+        border: 1px solid #fff;
+        color: #fff !important; /* force text color to white */
+    }
+
+    .table th {
+        background-color: #333; /* dark grey headers */
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #222; /* slightly different grey on alternating rows */
+    }
+
+/* Link styling */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #0056b3;
+    }
+
+/* Main title */
+h1 {
+    color: #fff; /* white text */
+}
+
+/* Search box and button */
+input[type="text"],
+input[type="submit"] {
+    padding: 10px;
+    font-size: 1em;
+    background-color: #222; /* dark gray input background */
+    color: #fff; /* white text */
+    border: none; /* no border to blend into the dark background */
+}
