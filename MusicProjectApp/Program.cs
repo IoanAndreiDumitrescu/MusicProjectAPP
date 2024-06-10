@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
+using MusicProjectApp.Services.Repositorio;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

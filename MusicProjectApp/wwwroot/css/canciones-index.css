@@ -1,0 +1,52 @@
+﻿body {
+    background-color: #F8DED1; /* light pastel peach */
+    color: #084C61; /* dark blue */
+}
+
+.navbar {
+    background-color: #E4C3AD; /* pastel brown */
+}
+
+.nav-item a {
+    color: #084C61; /* dark blue */
+    transition: color 0.2s ease-in-out;
+}
+
+    .nav-item a:hover {
+        color: #EB6E80; /* pastel pink coral */
+    }
+
+header,
+footer {
+    background-color: #76A08A; /* pastel sea green */
+    color: #084C61; /* dark blue */
+}
+
+.container {
+    background-color: #DFE7FD; /* pastel light blue */
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    color: #EB6E80; /* pastel pink coral */
+}
+
+    a:hover {
+        color: #084C61; /* dark blue */
+    }
+
+.table {
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+    .table th {
+        background-color: #76A08A; /* pastel sea green */
+        color: #084C61; /* dark blue */
+    }
+
+    .table td {
+        background-color: #F8DED1; /* light pastel peach */
+    }
