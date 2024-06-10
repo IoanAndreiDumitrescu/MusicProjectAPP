@@ -1,0 +1,45 @@
+﻿/* in ~/css/header.css */
+.navbar-brand img {
+    height: 100%;
+    max-height: 50px;
+}
+
+
+body {
+    background-color: #1E1E1E;
+    color: #fff;
+}
+
+.navbar {
+    background-color: #181818;
+}
+
+.nav-item a {
+    color: #fff;
+    transition: color 0.5s ease-in-out;
+}
+
+    .nav-item a:hover {
+        color: #1DB954; /* Spotify green color */
+    }
+
+header,
+footer {
+    background-color: #2B2B2B;
+    color: #fff;
+}
+
+.container {
+    background-color: #333;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    color: #1DB954;
+}
+
+    a:hover {
+        color: #fff;
+    }

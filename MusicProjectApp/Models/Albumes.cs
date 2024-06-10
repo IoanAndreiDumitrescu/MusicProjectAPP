@@ -11,7 +11,7 @@ public partial class Albumes
 
     public DateOnly? Fecha { get; set; }
 
-    public string? Titulo { get; set; }
+    public required string Titulo { get; set; }
 
-    public virtual ICollection<Canciones> Canciones { get; set; } = new List<Canciones>();
+    public virtual ICollection<Canciones> Canciones { get; set; } = [];
 }

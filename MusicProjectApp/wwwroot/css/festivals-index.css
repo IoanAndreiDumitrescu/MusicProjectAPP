@@ -1,0 +1,52 @@
+﻿body {
+    background-color: #E5FCFF; /* light pastel cyan */
+    color: #046880; /* dark pacific blue */
+}
+
+.navbar {
+    background-color: #FFB447; /* pastel orange */
+}
+
+.nav-item a {
+    color: #046880; /* dark pacific blue */
+    transition: color 0.3s ease;
+}
+
+    .nav-item a:hover {
+        color: #FE6B64; /* pastel red coral */
+    }
+
+header,
+footer {
+    background-color: #96D38C; /* pastel green */
+    color: #046880; /* dark pacific blue */
+}
+
+.container {
+    background-color: #CAF3FF; /* pastel sky blue */
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    color: #FE6B64; /* pastel red coral */
+}
+
+    a:hover {
+        color: #046880; /* dark pacific blue */
+    }
+
+.table {
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+    .table th {
+        background-color: #96D38C; /* pastel green */
+        color: #046880; /* dark pacific blue */
+    }
+
+    .table td {
+        background-color: #E5FCFF; /* light pastel cyan */
+    }

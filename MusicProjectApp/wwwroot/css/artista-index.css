@@ -1,0 +1,52 @@
+﻿body {
+    background-color: #FFFACE; /* light pastel yellow */
+    color: #2A363B; /* dark blue */
+}
+
+.navbar {
+    background-color: #FE9C8F; /* pastel red */
+}
+
+.nav-item a {
+    color: #2A363B; /* matching dark blue */
+    transition: color 0.5s ease-in-out;
+}
+
+    .nav-item a:hover {
+        color: #FF847C; /* pastel coral */
+    }
+
+header,
+footer {
+    background-color: #99B898; /* pastel green */
+    color: #2A363B; /* dark blue */
+}
+
+.container {
+    background-color: #FECEA8; /* pastel orange */
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    color: #FF847C; /* pastel coral */
+}
+
+    a:hover {
+        color: #2A363B; /* dark blue */
+    }
+
+.table {
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.25);
+}
+
+    .table th {
+        background-color: #99B898; /* pastel green */
+        color: #2A363B; /* dark blue */
+    }
+
+    .table td {
+        background-color: #E5FCC2; /* cool pastel green */
+    }

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
+using MusicProjectApp.Services.Repositorio;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MusicProjectApp.Controllers
@@ -20,9 +22,21 @@ namespace MusicProjectApp.Controllers
         }
 
         // GET: Canciones
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _cancionesRepo.DameTodos());
+            Expression<Func<Canciones, bool>> filterExpression;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                filterExpression = a => a.Titulo.StartsWith(searchString);
+            }
+            else
+            {
+                filterExpression = a => true;
+            }
+            var canciones = await _cancionesRepo.Filtra(filterExpression);
+
+            return View(canciones);
         }
 
         // GET: Canciones/Details/5
@@ -34,6 +48,7 @@ namespace MusicProjectApp.Controllers
             }
 
             var canciones = await _cancionesRepo.DameUno(id.Value);
+
             if (canciones == null)
             {
                 return NotFound();

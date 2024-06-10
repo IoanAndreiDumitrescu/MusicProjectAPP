@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
+using MusicProjectApp.Services.Repositorio;
 using System.Linq.Expressions;
 
 namespace MusicProjectApp.Controllers
@@ -21,7 +21,7 @@ namespace MusicProjectApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                filterExpression = a => a.Titulo.Contains(searchString);
+                filterExpression = a => a.Titulo.StartsWith(searchString);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace MusicProjectApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repo.Agregar(album);
+                await _repo.Agregar(album);
                 return RedirectToAction("Index");
             }
             return View(album);
@@ -82,7 +82,7 @@ namespace MusicProjectApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _repo.Modificar(album.Id, album);
+                await _repo.Modificar(album.Id, album);
                 return RedirectToAction("Index");
             }
 
