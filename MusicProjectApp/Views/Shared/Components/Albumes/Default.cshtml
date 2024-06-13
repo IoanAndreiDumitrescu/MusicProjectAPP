@@ -1,22 +1,11 @@
-﻿@* @model IEnumerable<MusicProjectApp.Models.Albumes>
+﻿@model IEnumerable<MusicProjectApp.Models.Albumes>
+
 @{
     ViewData["Title"] = "Index";
 }
-<link href="~/css/album-index.css" rel="stylesheet" />
-<form asp-controller="Albumes" asp-action="Index" method="get">
-    <div>
-        Search By Title:
-        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-        <input type="submit" value="Search" />
-    </div>
-</form>
-
+<link href="~/css/albumes-view-component.css" rel="stylesheet" />
 <h1>Albumes</h1>
 
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -44,13 +33,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+           
         </tr>
 }
     </tbody>
-</table> *@
-@await Component.InvokeAsync("Albumes")
+</table>

@@ -4,11 +4,11 @@ using MusicProjectApp.Models;
 
 namespace MusicProjectApp.Services.Repositorio
 {
-    public class EFGenericRepositorio<T> : IGenericRepositorio<T> where T : class
+    public class EfGenericRepositorio<T> : IGenericRepositorio<T> where T : class
     {
         private readonly GrupoAContext _context;
 
-        public EFGenericRepositorio(GrupoAContext context)
+        public EfGenericRepositorio(GrupoAContext context)
         {
             _context = context;
         }

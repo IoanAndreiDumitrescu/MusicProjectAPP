@@ -8,19 +8,12 @@ using System.Threading.Tasks;
 
 namespace MusicProjectApp.Controllers
 {
-    public class CancionesController : Controller
+    public class CancionesController(
+        IGenericRepositorio<Canciones> cancionesRepo,
+        IGenericRepositorio<Albumes> albumesRepo,
+        IGenericRepositorio<Artistas> artistasRepo)
+        : Controller
     {
-        private readonly IGenericRepositorio<Canciones> _cancionesRepo;
-        private readonly IGenericRepositorio<Albumes> _albumesRepo;
-        private readonly IGenericRepositorio<Artistas> _artistasRepo;
-
-        public CancionesController(IGenericRepositorio<Canciones> cancionesRepo, IGenericRepositorio<Albumes> albumesRepo, IGenericRepositorio<Artistas> artistasRepo)
-        {
-            _cancionesRepo = cancionesRepo;
-            _albumesRepo = albumesRepo;
-            _artistasRepo = artistasRepo;
-        }
-
         // GET: Canciones
         public async Task<IActionResult> Index(string searchString)
         {
@@ -34,7 +27,7 @@ namespace MusicProjectApp.Controllers
             {
                 filterExpression = a => true;
             }
-            var canciones = await _cancionesRepo.Filtra(filterExpression);
+            var canciones = await cancionesRepo.Filtra(filterExpression);
 
             return View(canciones);
         }
@@ -47,7 +40,7 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await _cancionesRepo.DameUno(id.Value);
+            var canciones = await cancionesRepo.DameUno(id.Value);
 
             if (canciones == null)
             {
@@ -60,8 +53,8 @@ namespace MusicProjectApp.Controllers
         // GET: Canciones/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo");
-            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre");
+            ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo");
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre");
             return View();
         }
 
@@ -72,11 +65,11 @@ namespace MusicProjectApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _cancionesRepo.Agregar(canciones);
+                await cancionesRepo.Agregar(canciones);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -88,13 +81,13 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await _cancionesRepo.DameUno(id.Value);
+            var canciones = await cancionesRepo.DameUno(id.Value);
             if (canciones == null)
             {
                 return NotFound();
             }
-            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -112,7 +105,7 @@ namespace MusicProjectApp.Controllers
             {
                 try
                 {
-                    await _cancionesRepo.Modificar(id, canciones);
+                    await cancionesRepo.Modificar(id, canciones);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -127,8 +120,8 @@ namespace MusicProjectApp.Controllers
                     }
                 }
             }
-            ViewData["AlbumId"] = new SelectList(await _albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await _artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -140,7 +133,7 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await _cancionesRepo.DameUno(id.Value);
+            var canciones = await cancionesRepo.DameUno(id.Value);
             if (canciones == null)
             {
                 return NotFound();
@@ -154,13 +147,13 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _cancionesRepo.Borrar(id);
+            await cancionesRepo.Borrar(id);
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> CancionesExists(int id)
         {
-            var canciones = await _cancionesRepo.DameUno(id);
+            var canciones = await cancionesRepo.DameUno(id);
             return canciones != null;
         }
     }
