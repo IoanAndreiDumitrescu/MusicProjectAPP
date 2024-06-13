@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MusicProjectApp.Models.Artistas>
+﻿@using MusicProjectApp.Services.Specifications.Canciones
+@model IEnumerable<MusicProjectApp.Models.Artistas>
 
 @{
     ViewData["Title"] = "Index";
@@ -44,9 +45,8 @@
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <h1>Canciones del artista</h1>
+                @await Component.InvokeAsync("Canciones", new ArtistaSpecification(item.Id))
             </td>
         </tr>
 }
