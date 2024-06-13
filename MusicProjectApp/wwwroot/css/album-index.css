@@ -12,9 +12,9 @@
     transition: color 0.5s ease-in-out;
 }
 
-    .nav-item a:hover {
-        color: #FEB5A6; /* pastel coral */
-    }
+.nav-item a:hover {
+    color: #FEB5A6; /* pastel coral */
+}
 
 header,
 footer {
@@ -33,21 +33,25 @@ a {
     color: #FEB5A6; /* pastel coral */
 }
 
-    a:hover {
-        color: #623F99; /* dark purple */
-    }
-
+a:hover {
+    color: #623F99; /* dark purple */
+}
 
 .table {
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
 }
 
-    .table th {
-        background-color: #CDCED1; /* pastel grey */
-        color: #623F99; /* dark purple */
-    }
+.table th {
+    background-color: #CDCED1; /* pastel grey */
+    color: #623F99; /* dark purple */
+}
 
-    .table td {
-        background-color: #FDFAF6; /* off-pastel white */
-    }
+.table td {
+    background-color: #FDFAF6; /* off-pastel white */
+    transition: background-color 0.5s ease-in-out; /* added transition */
+}
+
+.table td:hover { /* added hover effect */
+    background-color: #C9C6F2; /* change color to pastel periwinkle when hover */
+}

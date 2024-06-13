@@ -1,11 +1,16 @@
+
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using MusicProjectApp.Services.Specifications
 @using MusicProjectApp.Services.Specifications.Canciones
 @model IEnumerable<MusicProjectApp.Models.Albumes>
 
+=======
+﻿@* @model IEnumerable<MusicProjectApp.Models.Albumes>
+
 @{
     ViewData["Title"] = "Index";
 }
+<link href="~/css/album-index.css" rel="stylesheet" />
 <form asp-controller="Albumes" asp-action="Index" method="get">
     <div>
         Search By Title:
@@ -53,7 +58,12 @@
         </tr>
     }
     </tbody>
+
 </table>
 <div>
 
 </div>
+=======
+</table> *@
+@await Component.InvokeAsync("Albumes")
+
