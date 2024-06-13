@@ -6,15 +6,8 @@ using System.Linq.Expressions;
 
 namespace MusicProjectApp.Controllers
 {
-    public class ArtistasController : Controller
+    public class ArtistasController(IGenericRepositorio<Artistas> repo) : Controller
     {
-        private readonly IGenericRepositorio<Artistas> _repo;
-
-        public ArtistasController(IGenericRepositorio<Artistas> repo)
-        {
-            _repo = repo;
-        }
-
         // GET: Artistas
         public async Task<IActionResult> Index(string searchString)
         {
@@ -28,7 +21,7 @@ namespace MusicProjectApp.Controllers
             {
                 filterExpression = a => true;
             }
-            var artista = await _repo.Filtra(filterExpression);
+            var artista = await repo.Filtra(filterExpression);
 
             return View(artista);
         }
@@ -38,7 +31,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await _repo.DameUno(id.Value);
+            Artistas artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -57,7 +50,7 @@ namespace MusicProjectApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _repo.Agregar(artista);
+                await repo.Agregar(artista);
                 return RedirectToAction("Index");
             }
             return View(artista);
@@ -68,7 +61,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await _repo.DameUno(id.Value);
+            Artistas artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -83,7 +76,7 @@ namespace MusicProjectApp.Controllers
 
             if (ModelState.IsValid)
             {
-                await _repo.Modificar(artista.Id, artista);
+                await repo.Modificar(artista.Id, artista);
                 return RedirectToAction("Index");
             }
 
@@ -95,7 +88,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await _repo.DameUno(id.Value);
+            Artistas artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -106,7 +99,7 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var artista = await _repo.Borrar(id);
+            var artista = await repo.Borrar(id);
             return RedirectToAction("Index");
         }
     }

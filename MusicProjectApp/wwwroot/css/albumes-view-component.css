@@ -1,0 +1,44 @@
+﻿/* Start of essential CSS for table */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #4a4a4d;
+    font: 14px/1 'Open Sans', sans-serif;
+}
+
+.table th,
+.table td {
+    padding: 10px 15px;
+    vertical-align: middle;
+}
+
+.table thead {
+    background: #395870;
+    color: #fff;
+    border-bottom: 4px solid #2971ad;
+}
+
+.table th {
+    font-weight: 500;
+}
+/* End of essential CSS for table */
+
+/* Start of hover effect CSS */
+
+/* Define a pastel background color for table rows */
+.table tr {
+    background-color: #FDFAF6; /* Off-pastel white */
+    transition: background-color 0.3s ease;
+}
+
+/* Define a different pastel color for when you hover over table rows */
+.table tr:hover {
+    background-color: #FEE1DB; /* Light pastel pink */
+}
+
+/* Edge case for the first row to override the hover color */
+.table tr:first-child:hover {
+    background-color: #FEE1DB; /* Light pastel pink */
+}
+/* End of hover effect CSS */
