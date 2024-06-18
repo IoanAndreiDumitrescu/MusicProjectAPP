@@ -97,7 +97,7 @@ namespace MusicProjectApp.Controllers
             Albumes album = await _repo.DameUno(id.Value);
             if (album == null) return NotFound();
 
-            return View(album);
+            return View(album);        
         }
 
         // POST: Albumes/Delete/5
