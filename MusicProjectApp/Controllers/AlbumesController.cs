@@ -98,7 +98,7 @@ namespace MusicProjectApp.Controllers
             var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
 
-            return View(album);
+            return View(album);        
         }
 
         // POST: Albumes/Delete/5
