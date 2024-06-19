@@ -1,12 +1,12 @@
 ﻿namespace MusicProjectApp.Services.Specifications.Canciones
 {
-    public class ArtistaSpecification(int ArtistaId) : ICancionesSpecification
+    public class ArtistaSpecification(int artistaId) : ICancionesSpecification
     {
 
 
         public bool IsValid(Models.Canciones element)
         {
-            return element.ArtistaId == ArtistaId;
+            return element.ArtistaId == artistaId;
 
         }
     }

@@ -1,0 +1,17 @@
+﻿@model MusicProjectApp.Views.Canciones.CancionViewModel
+
+<h1>@Model.Titulo</h1>
+
+<p>Artista: @Model.Artista!.Nombre</p>
+
+<p>Album: @Model.Album!.Titulo</p>
+
+<p>Género del album: @Model.GenerosDelAlbum</p>
+
+<h2>Canciones:</h2>
+<ul>
+    @foreach (var cancion in Model.Canciones!)
+    {
+        <li>@cancion.Titulo</li>
+    }
+</ul>

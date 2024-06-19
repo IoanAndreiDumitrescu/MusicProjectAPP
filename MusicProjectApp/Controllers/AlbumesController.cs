@@ -14,6 +14,15 @@ namespace MusicProjectApp.Controllers
             _repo = repo;
         }
 
+        private async Task<Albumes?> GetVerifiedAlbum(int? id)
+        {
+            if (id == null)
+                return null;
+
+            var album = await _repo.DameUno(id.Value);
+            return album;
+        }
+
         // GET: Albumes
         public async Task<IActionResult> Index(string searchString)
         {
@@ -25,19 +34,16 @@ namespace MusicProjectApp.Controllers
             }
             else
             {
-                filterExpression = a => true; 
+                filterExpression = a => true;
             }
             var albums = await _repo.Filtra(filterExpression);
-
             return View(albums);
         }
 
         // GET: Albumes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
-
-            Albumes album = await _repo.DameUno(id.Value);
+            var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
 
             return View(album);
@@ -57,7 +63,7 @@ namespace MusicProjectApp.Controllers
             if (ModelState.IsValid)
             {
                 await _repo.Agregar(album);
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             return View(album);
         }
@@ -65,9 +71,7 @@ namespace MusicProjectApp.Controllers
         // GET: Albumes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
-
-            Albumes album = await _repo.DameUno(id.Value);
+            var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
 
             return View(album);
@@ -83,18 +87,15 @@ namespace MusicProjectApp.Controllers
             if (ModelState.IsValid)
             {
                 await _repo.Modificar(album.Id, album);
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-
             return View(album);
         }
 
         // GET: Albumes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
-
-            Albumes album = await _repo.DameUno(id.Value);
+            var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
 
             return View(album);
@@ -105,9 +106,8 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var album = await _repo.Borrar(id);
-            return RedirectToAction("Index");
+            await _repo.Borrar(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
-

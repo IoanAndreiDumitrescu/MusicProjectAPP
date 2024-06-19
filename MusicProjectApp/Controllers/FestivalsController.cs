@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
@@ -40,7 +36,7 @@ namespace MusicProjectApp.Controllers
         // GET: Festivals/Create
         public IActionResult Create()
         {
-            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre");
+            ViewData[$"ArtistaId"] = new SelectList(context.Artistas, "Id", $"Nombre");
             return View();
         }
 

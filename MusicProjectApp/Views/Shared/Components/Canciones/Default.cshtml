@@ -6,7 +6,7 @@
                 @Html.DisplayNameFor(model => model.Titulo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Artista.Nombre)
+                @Html.DisplayNameFor(model => model.Artista!.Nombre)
             </th>
 
         </tr>
@@ -19,7 +19,7 @@
                     @Html.DisplayFor(modelItem => item.Titulo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Artista.Nombre)
+                    @Html.DisplayFor(modelItem => item.Artista!.Nombre)
                 </td>
             </tr>
         }
