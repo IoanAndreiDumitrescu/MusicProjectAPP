@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace MusicProjectApp.Controllers
 {

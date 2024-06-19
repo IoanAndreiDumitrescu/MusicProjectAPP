@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MusicProjectApp.Models;
+﻿namespace MusicProjectApp.Models;
 
 public partial class Canciones
 {

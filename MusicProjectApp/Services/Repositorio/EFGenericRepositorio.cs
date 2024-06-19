@@ -4,19 +4,13 @@ using MusicProjectApp.Models;
 
 namespace MusicProjectApp.Services.Repositorio
 {
-    public class EfGenericRepositorio<T> : IGenericRepositorio<T> where T : class
+    public class EfGenericRepositorio<T>(GrupoAContext context) : IGenericRepositorio<T>
+        where T : class
     {
-        private readonly GrupoAContext _context;
-
-        public EfGenericRepositorio(GrupoAContext context)
+        public async Task<bool> Agregar(T element)
         {
-            _context = context;
-        }
-
-        public async Task<bool> Agregar(T entity)
-        {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await context.Set<T>().AddAsync(element);
+            await context.SaveChangesAsync();
             return true;
         }
 
@@ -25,8 +19,8 @@ namespace MusicProjectApp.Services.Repositorio
             var entity = await DameUno(id);
             if (entity != null)
             {
-                _context.Set<T>().Remove(entity);
-                await _context.SaveChangesAsync();
+                context.Set<T>().Remove(entity);
+                await context.SaveChangesAsync();
                 return true;
             }
             return false;
@@ -34,23 +28,23 @@ namespace MusicProjectApp.Services.Repositorio
 
         public async Task<List<T>> DameTodos()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> DameUno(int id)
+        public async Task<T?> DameUno(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await context.Set<T>().FindAsync(id);
         }
 
         public async Task<List<T>> Filtra(Expression<Func<T, bool>> predicado)
         {
-            return await _context.Set<T>().Where(predicado).ToListAsync();
+            return await context.Set<T>().Where(predicado).ToListAsync();
         }
 
-        public async Task Modificar(int id, T entity)
+        public async Task Modificar(int id, T element)
         {
-            _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
+            context.Set<T>().Update(element);
+            await context.SaveChangesAsync();
         }
     }
 }
