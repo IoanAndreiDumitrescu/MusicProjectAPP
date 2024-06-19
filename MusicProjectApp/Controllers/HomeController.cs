@@ -6,7 +6,7 @@ namespace MusicProjectApp.Controllers
 {
     public class HomeController(ILogger<HomeController> logger) : Controller
     {
-        private readonly ILogger<HomeController> _logger = logger;
+        public ILogger<HomeController> Logger { get; } = logger;
 
         public IActionResult Index()
         {

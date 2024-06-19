@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
 using System.Linq.Expressions;
@@ -31,7 +30,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await repo.DameUno(id.Value);
+            Artistas? artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -61,7 +60,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await repo.DameUno(id.Value);
+            Artistas? artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -88,7 +87,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await repo.DameUno(id.Value);
+            Artistas? artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -99,7 +98,7 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var artista = await repo.Borrar(id);
+            await repo.Borrar(id);
             return RedirectToAction("Index");
         }
     }
