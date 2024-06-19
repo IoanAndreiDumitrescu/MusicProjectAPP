@@ -1,49 +1,60 @@
-﻿/* in ~/css/header.css */
-.navbar-brand img {
-    height: 100%;
-    max-height: 50px;
-}
-
-.navbar{
-    background-color:#060d07
-}
-
+﻿/* General Styles */
 body {
-    background-image: url('/images/background.png');
-    background-attachment:fixed;
-    background-repeat:no-repeat;
-    background-size: cover; 
-    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
 }
 
-
-
-.nav-item a {
-    color: #fff;
-    transition: color 0.5s ease-in-out;
+/* Header and Navigation */
+.navbar-blue {
+    background-color: #007bff;
+    border-color: #007bff;
 }
 
-    .nav-item a:hover {
-        color: #1DB954; /* Spotify green color */
+.navbar-brand,
+.nav-link {
+    color: #000000 !important;
+}
+.navbar-brand img{
+    max-height: 70px;
+    height: 100%;
+}
+    .navbar-brand:hover,
+    .nav-link:hover {
+        color: #ffd700 !important;
     }
 
-header,
-footer {
-    background-color: #2B2B2B;
-    color: #fff;
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 215, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+/* Main Content */
 .container {
-    background-color: #333;
-    border-radius: 5px;
-    padding: 20px;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
-a {
-    color: #1DB954;
+/* Footer */
+.footer {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
 }
 
-    a:hover {
-        color: #fff;
+    .footer a {
+        color: #ffd700;
+        text-decoration: none;
     }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+    .navbar-nav {
+        text-align: center;
+    }
+}
