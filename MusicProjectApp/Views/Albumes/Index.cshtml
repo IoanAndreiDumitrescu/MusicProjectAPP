@@ -1,14 +1,12 @@
-
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using MusicProjectApp.Services.Specifications.Canciones
 @model IEnumerable<MusicProjectApp.Models.Albumes>
-
-=======
-﻿@* @model IEnumerable<MusicProjectApp.Models.Albumes>
 
 @{
     ViewData["Title"] = "Index";
 }
 <link href="~/css/album-index.css" rel="stylesheet" />
+
 <form asp-controller="Albumes" asp-action="Index" method="get">
     <div>
         Search By Title:
@@ -19,49 +17,28 @@
 
 <h1>Albumes</h1>
 
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Titulo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Genero)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Fecha)
-        </th>
+        <th>@Html.DisplayNameFor(model => model.Titulo)</th>
+        <th>@Html.DisplayNameFor(model => model.Genero)</th>
+        <th>@Html.DisplayNameFor(model => model.Fecha)</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genero)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @await Component.InvokeAsync("Canciones",new AlbumSpecification(item.Id))
-            </td>
+            <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+            <td>@Html.DisplayFor(modelItem => item.Genero)</td>
+            <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
+            <td>@await Component.InvokeAsync("Canciones",new AlbumSpecification(item.Id))</td>
         </tr>
     }
     </tbody>
-
 </table>
-<div>
-
-</div>
-=======
-</table> *@
-@await Component.InvokeAsync("Albumes")
-
+<div></div>
