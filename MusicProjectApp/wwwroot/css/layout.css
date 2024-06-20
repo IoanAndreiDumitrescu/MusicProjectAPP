@@ -1,5 +1,4 @@
-﻿/*Sets body margin and padding to 0. This strips away browser default styles.*/
-body {
+﻿body {
     margin: 0;
     padding: 0;
     box-sizing: border-box; /*This helps dimensions (like width and height) to include content, padding and border, but not the margin.*/
