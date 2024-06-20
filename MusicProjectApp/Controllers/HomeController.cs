@@ -4,6 +4,8 @@ using System.Diagnostics;
 
 namespace MusicProjectApp.Controllers
 {
+    
+    
     public class HomeController(ILogger<HomeController> logger) : Controller
     {
         public ILogger<HomeController> Logger { get; } = logger;
