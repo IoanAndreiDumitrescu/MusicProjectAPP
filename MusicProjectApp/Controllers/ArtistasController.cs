@@ -25,6 +25,23 @@ namespace MusicProjectApp.Controllers
             return View(artista);
         }
 
+        public async Task<IActionResult> CancionesPorArtista(string searchString)
+        {
+            Expression<Func<Artistas, bool>> filterExpression;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                filterExpression = a => a.Nombre.StartsWith(searchString);
+            }
+            else
+            {
+                filterExpression = a => true;
+            }
+            var artista = await repo.Filtra(filterExpression);
+
+            return View(artista);
+        }
+
         // GET: Artistas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
