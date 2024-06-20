@@ -40,6 +40,22 @@ namespace MusicProjectApp.Controllers
             return View(albums);
         }
 
+        public async Task<IActionResult> AlbumesPorCancion(string searchString)
+        {
+            Expression<Func<Albumes, bool>> filterExpression;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                filterExpression = a => a.Titulo.StartsWith(searchString);
+            }
+            else
+            {
+                filterExpression = a => true;
+            }
+            var albums = await _repo.Filtra(filterExpression);
+            return View(albums);
+        }
+
         // GET: Albumes/Details/5
         public async Task<IActionResult> Details(int? id)
         {

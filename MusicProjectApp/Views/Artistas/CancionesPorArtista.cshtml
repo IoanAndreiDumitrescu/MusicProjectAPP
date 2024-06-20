@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 <link href="~/css/artista-index.css" rel="stylesheet" />
-<form asp-controller="Artistas" asp-action="Index" method="get">
+<form asp-controller="Artistas" asp-action="CancionesPorArtista" method="get">
     <div>
         Buscar por Nombre:
         <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
@@ -19,21 +19,21 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genero)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Genero)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
@@ -44,12 +44,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                <td>
+                    <h1>Canciones del artista</h1>
+                    @await Component.InvokeAsync("Canciones", new ArtistaSpecification(item.Id))
+                </td>
         </tr>
-}
+    }
     </tbody>
 </table>
