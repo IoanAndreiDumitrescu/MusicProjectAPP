@@ -1,64 +1,33 @@
-﻿/* General Styles */
+﻿/*Sets body margin and padding to 0. This strips away browser default styles.*/
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    box-sizing: border-box; /*This helps dimensions (like width and height) to include content, padding and border, but not the margin.*/
 }
 
-/* Header and Navigation */
-.navbar-blue {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-header {
-    background-color:#708090;
-}
-
-.navbar-brand,
-.nav-link {
-    color: #000000 !important;
-}
-.navbar-brand img{
-    max-height: 70px;
-    height: 100%;
-}
-    .navbar-brand:hover,
-    .nav-link:hover {
-        color: #ffd700 !important;
-    }
-
-/* Main Content */
+/* General container for body content */
 .container {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    width: 80%; /* This means it occupies 80% of the viewport width. */
+    margin: 0 auto; /* This centers the container. Change values as needed.*/
 }
 
-/* Footer */
+/* Styles for the Navbar */
+.navbar {
+    display: flex; /* This creates a flex container which helps align child items.*/
+    justify-content: space-between; /* This evenly distributes items along the axis.*/
+    padding: 20px 0; /* Increase/decrease this value to increase/decrease spacing */
+}
+
+/* Styles for the main content */
+.main {
+    margin: 20px 0; /* Increase/decrease this value to increase/decrease spacing */
+}
+
+/* Styles for the footer */
 .footer {
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-    .footer a {
-        color: #ffd700;
-        text-decoration: none;
-    }
-
-        .footer a:hover {
-            color: #fff;
-        }
-
-/* Responsive Styles */
-@media (max-width: 767px) {
-    .navbar-nav {
-        text-align: center;
-    }
-}
-
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(0,0,0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    position: fixed; /* This makes the footer stay at the bottom of the page.*/
+    left: 0; /* Aligns the footer to start from left 0 */
+    bottom: 0; /* Aligns the footer to start from bottom 0 */
+    width: 100%; /* The footer occupies the full width*/
+    text-align: center; /* Centers the footer content */
 }
