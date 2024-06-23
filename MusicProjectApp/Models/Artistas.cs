@@ -8,7 +8,7 @@ public partial class Artistas
 
     public string? Genero { get; set; }
 
-    public DateOnly? Fecha { get; set; }
+    public DateTime Fecha { get; set; }
 
     public virtual ICollection<Canciones> Canciones { get; set; } = [];
 

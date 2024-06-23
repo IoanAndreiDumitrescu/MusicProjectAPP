@@ -14,7 +14,7 @@ namespace MusicProjectApp.Controllers
         : Controller
     {
         // GET: Canciones
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
             Expression<Func<Canciones, bool>> filterExpression;
 

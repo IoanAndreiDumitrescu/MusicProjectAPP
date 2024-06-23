@@ -24,7 +24,7 @@ namespace MusicProjectApp.Controllers
         }
 
         // GET: Albumes
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
             Expression<Func<Albumes, bool>> filterExpression;
 

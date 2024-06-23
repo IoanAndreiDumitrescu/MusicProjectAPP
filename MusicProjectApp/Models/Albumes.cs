@@ -2,13 +2,13 @@
 
 public partial class Albumes
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    public string? Genero { get; set; }
+    public string? Genero { get; init; }
 
-    public DateOnly? Fecha { get; set; }
+    public DateTime Fecha { get; init; }
 
-    public required string Titulo { get; set; }
+    public required string Titulo { get; init; }
 
-    public virtual ICollection<Canciones> Canciones { get; set; } = [];
+    public virtual ICollection<Canciones> Canciones { get; init; } = [];
 }
