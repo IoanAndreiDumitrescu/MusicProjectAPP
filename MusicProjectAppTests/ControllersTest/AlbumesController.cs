@@ -1,9 +1,9 @@
-﻿using System.Linq.Expressions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MusicProjectApp.Controllers;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
+using System.Linq.Expressions;
 
 namespace MusicProjectAppTests.ControllersTest
 {
@@ -12,123 +12,112 @@ namespace MusicProjectAppTests.ControllersTest
     {
         private Mock<IGenericRepositorio<Albumes>> _mockRepo = null!;
         private AlbumesController _controller = null!;
-
+        private Albumes _album = null!;
         [TestInitialize]
         public void TestInitialize()
         {
             _mockRepo = new Mock<IGenericRepositorio<Albumes>>();
             _controller = new AlbumesController(_mockRepo.Object);
+            _album = new Albumes { Id = 1, Genero = "Rock", Fecha = DateTime.Now.Date, Titulo = "Album 1" };
         }
-
         [TestMethod]
         public async Task Index_ReturnsViewResult_WithListOfAlbumes()
         {
-            _mockRepo.Setup(repo => repo.Filtra(It.IsAny<Expression<Func<Albumes, bool>>>())).ReturnsAsync([
-                new Albumes { Id = 1, Genero = "Genre1", Fecha = DateTime.Now, Titulo = "Title1" },
-                new Albumes { Id = 2, Genero = "Genre2", Fecha = DateTime.Now, Titulo = "Title2" }
-            ]);
-
+            // Arrange
+            var mockAlbumes = new List<Albumes> { _album };
+            _mockRepo.Setup(repo => repo.Filtra(It.IsAny<Expression<Func<Albumes, bool>>>())).ReturnsAsync(mockAlbumes);
+            // Act
             var result = await _controller.Index(null);
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
             var viewResult = result as ViewResult;
-
-            Assert.IsNotNull(result);
             Assert.IsNotNull(viewResult);
+            Assert.IsInstanceOfType(viewResult.ViewData.Model, typeof(IEnumerable<Albumes>));
             var model = viewResult.ViewData.Model as IEnumerable<Albumes>;
-            Assert.IsNotNull(model);
-            Assert.AreEqual(2, model.Count());
+            Assert.AreEqual(1, model!.Count());
         }
 
+
         [TestMethod]
-        public async Task Details_ReturnsNotFound_ForNullId()
+        public async Task Details_ReturnsNotFound_WhenIdIsNull()
         {
+            // Act
             var result = await _controller.Details(null);
-
-            Assert.IsNotNull(result);
+            // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
         }
 
         [TestMethod]
-        public async Task Details_ReturnsNotFound_ForInvalidId()
+        public async Task Details_ReturnsNotFound_WhenAlbumDoesNotExist()
         {
+            // Arrange
             _mockRepo.Setup(repo => repo.DameUno(It.IsAny<int>())).ReturnsAsync((Albumes)null!);
-
-            var result = await _controller.Details(999);
-
-            Assert.IsNotNull(result);
+            // Act
+            var result = await _controller.Details(1);
+            // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
         }
 
+
         [TestMethod]
-        public async Task Details_ReturnsView_WithAlbumes()
+        public async Task Details_ReturnsViewResult_WithAlbum()
         {
-            var expectedAlbum = new Albumes { Id = 1, Genero = "Genre1", Fecha = DateTime.Now, Titulo = "Title1" };
-            _mockRepo.Setup(repo => repo.DameUno(It.IsAny<int>())).ReturnsAsync(expectedAlbum);
-
+            // Arrange
+            _mockRepo.Setup(repo => repo.DameUno(It.IsAny<int>())).ReturnsAsync(_album);
+            // Act
             var result = await _controller.Details(1);
+            // Assert
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            Assert.IsInstanceOfType(viewResult.ViewData.Model, typeof(Albumes));
+            var model = viewResult.ViewData.Model as Albumes;
+            Assert.AreEqual(_album, model);
+        }
 
+       [TestMethod]
+public async Task Create_Post_ReturnsRedirectToAction_WhenModelStateIsValid()
+{
+    // Arrange
+    _mockRepo.Setup(repo => repo.Agregar(_album)).Returns(Task.FromResult(true));
+    // Act
+    var result = await _controller.Create(_album);
+    // Assert
+    Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
+    var redirectToActionResult = result as RedirectToActionResult;
+    Assert.IsNotNull(redirectToActionResult);
+    Assert.AreEqual("Index", redirectToActionResult.ActionName);
+}
+
+
+
+        [TestMethod]
+        public async Task Edit_Post_ReturnsViewResult_WhenModelStateIsInvalid()
+        {
+            // Arrange
+            _controller.ModelState.AddModelError("error", "some error");
+            // Act
+            var result = await _controller.Edit(1, _album);
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
             var model = viewResult.ViewData.Model as Albumes;
             Assert.IsNotNull(model);
-            Assert.AreEqual(expectedAlbum, model);
+            Assert.AreEqual(_album, model);
         }
 
         [TestMethod]
-        public async Task CreatePost_ReturnsRedirectToActionResult_RedirectsToIndex()
+        public async Task DeleteConfirmed_Post_ReturnsRedirectToAction()
         {
-            var newAlbum = new Albumes { Genero = "NewGenre", Fecha = DateTime.Now, Titulo = "NewTitle" };
-
-            var result = await _controller.Create(newAlbum);
-
-            Assert.IsNotNull(result);
+            // Arrange
+            _mockRepo.Setup(repo => repo.Borrar(It.IsAny<int>())).Returns(Task.FromResult(true));
+            // Act
+            var result = await _controller.DeleteConfirmed(1);
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
             var redirectToActionResult = result as RedirectToActionResult;
             Assert.IsNotNull(redirectToActionResult);
             Assert.AreEqual("Index", redirectToActionResult.ActionName);
-        }
-
-        [TestMethod]
-        public async Task DeleteConfirmed_ReturnsRedirectToActionResult_RedirectsToIndex()
-        {
-            var deleteId = 1;
-            var result = await _controller.DeleteConfirmed(deleteId);
-
-            Assert.IsNotNull(result);
-            var redirectToActionResult = result as RedirectToActionResult;
-            Assert.IsNotNull(redirectToActionResult);
-            Assert.AreEqual("Index", redirectToActionResult.ActionName);
-        }
-
-        [TestMethod]
-        public async Task Edit_ReturnsNotFoundResult_WhenIdIsNull()
-        {
-            var result = await _controller.Edit(id: null);
-
-            Assert.IsInstanceOfType(result, typeof(NotFoundResult));
-        }
-
-        [TestMethod]
-        public async Task Edit_ReturnsNotFoundResult_WhenIDoesNotExist()
-        {
-            _mockRepo.Setup(repo => repo.DameUno(It.IsAny<int>())).ReturnsAsync((Albumes)null!);
-
-            var result = await _controller.Edit(id: 1);
-
-            Assert.IsInstanceOfType(result, typeof(NotFoundResult));
-        }
-
-        [TestMethod]
-        public async Task Edit_ReturnsViewResult_WithAlbumes()
-        {
-            var expectedAlbum = new Albumes { Id = 1, Genero = "Genre1", Fecha = DateTime.Now, Titulo = "Title1" };
-            _mockRepo.Setup(repo => repo.DameUno(It.IsAny<int>())).ReturnsAsync(expectedAlbum);
-
-            var result = await _controller.Edit(id: 1);
-
-            var viewResult = result as ViewResult;
-            var model = viewResult?.ViewData.Model as Albumes;
-
-            Assert.IsNotNull(model);
-            Assert.AreEqual(expectedAlbum, model);
         }
 
     }

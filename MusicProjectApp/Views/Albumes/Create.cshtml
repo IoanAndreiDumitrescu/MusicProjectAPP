@@ -1,43 +1,36 @@
 ﻿@model MusicProjectApp.Models.Albumes
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Album";
 }
-
-<h1>Create</h1>
-
-<h4>Albumes</h4>
-<hr />
+<h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Genero" class="control-label"></label>
+            <div>
+                <label asp-for="Genero"></label>
                 <input asp-for="Genero" class="form-control" />
                 <span asp-validation-for="Genero" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
+            <div>
+                <label asp-for="Fecha"></label>
                 <input asp-for="Fecha" type="date" class="form-control" />
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
+            <div>
+                <label asp-for="Titulo"></label>
                 <input asp-for="Titulo" class="form-control" />
                 <span asp-validation-for="Titulo" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

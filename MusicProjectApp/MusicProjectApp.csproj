@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\album-index.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Home\untitled\.idea\misc.xml" />
+    <Content Include="Views\Home\untitled\.idea\modules.xml" />
+    <Content Include="Views\Home\untitled\.idea\workspace.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +38,10 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\Components\Artistas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Home\untitled\.idea\.gitignore" />
   </ItemGroup>
 
 </Project>

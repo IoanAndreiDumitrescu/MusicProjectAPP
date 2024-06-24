@@ -9,7 +9,7 @@ namespace MusicProjectApp.Views.Shared.Components.Albumes
         public async Task<IViewComponentResult> InvokeAsync()
         {
             IEnumerable<Models.Albumes> coleccionInicial = await repositorio.DameTodos();
-            coleccionInicial = coleccionInicial.Where(x => x.Genero != null && x.Fecha != null);
+            coleccionInicial = coleccionInicial.Where(x => x.Genero != null);
             return View(coleccionInicial);
         }
     }

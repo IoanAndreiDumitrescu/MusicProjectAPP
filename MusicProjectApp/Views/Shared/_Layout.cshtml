@@ -5,8 +5,8 @@
 </head>
 <body>
 <!-- Navbar -->
-@Html.Partial("Components/Navbar/_NavbarPartial")
-    
+@await Html.PartialAsync("Components/Navbar/_NavbarPartial")
+
 <!-- Main body content -->
 <div class="container">
     <main role="main" class="pb-3">
@@ -17,7 +17,7 @@
 <!-- Footer -->
 <footer class="border-top footer text-muted">
     <div class="container">
-        @Html.Partial("Components/Footer/_Footer")
+        @await Html.PartialAsync("Components/Footer/_Footer")
     </div>
 </footer>
 

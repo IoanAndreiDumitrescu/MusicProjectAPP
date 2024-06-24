@@ -5,15 +5,19 @@ using MusicProjectApp.Models;
 
 namespace MusicProjectApp.Controllers
 {
-    public class FestivalsController(GrupoAContext context) : Controller
+    public class FestivalsController : Controller
     {
+        private readonly GrupoAContext _context;
+        public FestivalsController(GrupoAContext context)
+        {
+            _context = context;
+        }
         // GET: Festivals
         public async Task<IActionResult> Index()
         {
-            var grupoAContext = context.Festival.Include(f => f.Artista);
+            var grupoAContext = _context.Festival.Include(f => f.Artista);
             return View(await grupoAContext.ToListAsync());
         }
-
         // GET: Festivals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -21,25 +25,21 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-
-            var festival = await context.Festival
+            var festival = await _context.Festival
                 .Include(f => f.Artista)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (festival == null)
             {
                 return NotFound();
             }
-
             return View(festival);
         }
-
         // GET: Festivals/Create
         public IActionResult Create()
         {
-            ViewData[$"ArtistaId"] = new SelectList(context.Artistas, "Id", $"Nombre");
+            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre");
             return View();
         }
-
         // POST: Festivals/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -49,14 +49,13 @@ namespace MusicProjectApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Add(festival);
-                await context.SaveChangesAsync();
+                _context.Add(festival);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre", festival.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", festival.ArtistaId);
             return View(festival);
         }
-
         // GET: Festivals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -64,19 +63,17 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-
-            var festival = await context.Festival.FindAsync(id);
+            var festival = await _context.Festival.FindAsync(id);
             if (festival == null)
             {
                 return NotFound();
             }
-            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre", festival.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", festival.ArtistaId);
             return View(festival);
         }
-
         // POST: Festivals/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // "For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,ArtistaId,Ciudad,FechaInicio,FechaFinal")] Festival festival)
@@ -85,13 +82,12 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    context.Update(festival);
-                    await context.SaveChangesAsync();
+                    _context.Update(festival);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -106,10 +102,9 @@ namespace MusicProjectApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre", festival.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", festival.ArtistaId);
             return View(festival);
         }
-
         // GET: Festivals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -117,36 +112,31 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-
-            var festival = await context.Festival
+            var festival = await _context.Festival
                 .Include(f => f.Artista)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (festival == null)
             {
                 return NotFound();
             }
-
             return View(festival);
         }
-
         // POST: Festivals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var festival = await context.Festival.FindAsync(id);
+            var festival = await _context.Festival.FindAsync(id);
             if (festival != null)
             {
-                context.Festival.Remove(festival);
+                _context.Festival.Remove(festival);
             }
-
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
         private bool FestivalExists(int id)
         {
-            return context.Festival.Any(e => e.Id == id);
+            return _context.Festival.Any(e => e.Id == id);
         }
     }
 }

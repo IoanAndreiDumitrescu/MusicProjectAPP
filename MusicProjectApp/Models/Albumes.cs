@@ -1,14 +1,15 @@
-﻿namespace MusicProjectApp.Models;
-
-public partial class Albumes
+﻿namespace MusicProjectApp.Models
 {
-    public int Id { get; init; }
+    public class Albumes
+    {
+        public int Id { get; init; }
 
-    public string? Genero { get; init; }
+        public string? Genero { get; init; }
 
-    public DateTime Fecha { get; init; }
+        public DateTime Fecha { get; init; }
 
-    public required string Titulo { get; init; }
+        public required string? Titulo { get; init; }
 
-    public virtual ICollection<Canciones> Canciones { get; init; } = [];
+        public virtual ICollection<Canciones> Canciones { get; init; } = [];
+    }
 }

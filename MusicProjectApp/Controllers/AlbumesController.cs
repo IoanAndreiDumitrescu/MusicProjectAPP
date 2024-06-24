@@ -5,21 +5,14 @@ using System.Linq.Expressions;
 
 namespace MusicProjectApp.Controllers
 {
-    public class AlbumesController : Controller
+    public class AlbumesController(IGenericRepositorio<Albumes> repo) : Controller
     {
-        private readonly IGenericRepositorio<Albumes> _repo;
-
-        public AlbumesController(IGenericRepositorio<Albumes> repo)
-        {
-            _repo = repo;
-        }
-
         private async Task<Albumes?> GetVerifiedAlbum(int? id)
         {
             if (id == null)
                 return null;
 
-            var album = await _repo.DameUno(id.Value);
+            var album = await repo.DameUno(id.Value);
             return album;
         }
 
@@ -30,13 +23,13 @@ namespace MusicProjectApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                filterExpression = a => a.Titulo.StartsWith(searchString);
+                filterExpression = a => a.Titulo!.StartsWith(searchString);
             }
             else
             {
                 filterExpression = a => true;
             }
-            var albums = await _repo.Filtra(filterExpression);
+            var albums = await repo.Filtra(filterExpression);
             return View(albums);
         }
 
@@ -46,13 +39,13 @@ namespace MusicProjectApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                filterExpression = a => a.Titulo.StartsWith(searchString);
+                filterExpression = a => a.Titulo!.StartsWith(searchString);
             }
             else
             {
                 filterExpression = a => true;
             }
-            var albums = await _repo.Filtra(filterExpression);
+            var albums = await repo.Filtra(filterExpression);
             return View(albums);
         }
 
@@ -78,7 +71,7 @@ namespace MusicProjectApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _repo.Agregar(album);
+                await repo.Agregar(album);
                 return RedirectToAction(nameof(Index));
             }
             return View(album);
@@ -102,7 +95,7 @@ namespace MusicProjectApp.Controllers
 
             if (ModelState.IsValid)
             {
-                await _repo.Modificar(album.Id, album);
+                await repo.Modificar(album.Id, album);
                 return RedirectToAction(nameof(Index));
             }
             return View(album);
@@ -122,7 +115,7 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _repo.Borrar(id);
+            await repo.Borrar(id);
             return RedirectToAction(nameof(Index));
         }
     }

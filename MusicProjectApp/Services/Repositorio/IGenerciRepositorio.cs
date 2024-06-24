@@ -10,5 +10,6 @@ namespace MusicProjectApp.Services.Repositorio
         Task<bool> Agregar(T element);
         Task Modificar(int id, T element);
         Task<List<T>> Filtra(Expression<Func<T, bool>> predicado);
+        
     }
 }
