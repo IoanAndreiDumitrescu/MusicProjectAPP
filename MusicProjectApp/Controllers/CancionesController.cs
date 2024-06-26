@@ -10,11 +10,11 @@ namespace MusicProjectApp.Controllers
     public class CancionesController(
         IGenericRepositorio<Canciones> cancionesRepo,
         IGenericRepositorio<Albumes> albumesRepo,
-        IGenericRepositorio<Artistas> artistasRepo)
+        IGenericRepositorio<Artistas>? artistasRepo)
         : Controller
     {
         // GET: Canciones
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
             Expression<Func<Canciones, bool>> filterExpression;
 
@@ -53,7 +53,7 @@ namespace MusicProjectApp.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo");
-            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre");
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo!.DameTodos(), "Id", "Nombre");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace MusicProjectApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo!.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -86,7 +86,7 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
             ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo!.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
@@ -120,7 +120,7 @@ namespace MusicProjectApp.Controllers
                 }
             }
             ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await artistasRepo.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(await artistasRepo!.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
             return View(canciones);
         }
 
