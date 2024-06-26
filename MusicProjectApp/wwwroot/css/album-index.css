@@ -39,6 +39,7 @@ a:hover {
 
 .table {
     border-radius: 5px;
+    box-shadow: 2px 2px 5px #000000;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
 }
 

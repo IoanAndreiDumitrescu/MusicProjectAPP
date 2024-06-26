@@ -11,7 +11,7 @@ namespace MusicProjectApp.Views.Shared.Components.Canciones
         {
             var coleccionInicial = await coleccion.DameTodos();
             if (especificacion is not null)
-                coleccionInicial = coleccionInicial.Where(x=>especificacion.IsValid(x)).ToList();
+                coleccionInicial = coleccionInicial.Where(especificacion.IsValid).ToList();
             foreach (var elemento in coleccionInicial)
             {
                 var artista = await colArt.DameUno((int)elemento.ArtistaId!);

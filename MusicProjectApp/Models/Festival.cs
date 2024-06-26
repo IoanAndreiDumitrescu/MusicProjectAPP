@@ -1,18 +1,19 @@
-﻿namespace MusicProjectApp.Models;
-
-public partial class Festival
+﻿namespace MusicProjectApp.Models
 {
-    public int Id { get; set; }
+    public class Festival
+    {
+        public int Id { get; set; }
 
-    public string? Nombre { get; set; }
+        public string? Nombre { get; set; }
 
-    public int? ArtistaId { get; set; }
+        public int? ArtistaId { get; set; }
 
-    public string? Ciudad { get; set; }
+        public string? Ciudad { get; set; }
 
-    public DateOnly? FechaInicio { get; set; }
+        public DateOnly? FechaInicio { get; set; }
 
-    public DateOnly? FechaFinal { get; set; }
+        public DateOnly? FechaFinal { get; set; }
 
-    public virtual Artistas? Artista { get; set; }
+        public virtual Artistas? Artista { get; set; }
+    }
 }

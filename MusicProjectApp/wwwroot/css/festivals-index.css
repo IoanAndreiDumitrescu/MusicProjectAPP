@@ -39,10 +39,11 @@ a {
 
 .table {
     border-radius: 5px;
+    box-shadow: 1px 1px 5px #000000;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
-    .table th {
+.table th {
         background-color: #96D38C; /* pastel green */
         color: #046880; /* dark pacific blue */
     }
