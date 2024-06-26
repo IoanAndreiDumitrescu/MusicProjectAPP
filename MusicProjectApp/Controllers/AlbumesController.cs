@@ -16,55 +16,30 @@ namespace MusicProjectApp.Controllers
             return album;
         }
 
-        // GET: Albumes
         public async Task<IActionResult> Index(string? searchString)
         {
-            Expression<Func<Albumes, bool>> filterExpression;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                filterExpression = a => a.Titulo!.StartsWith(searchString);
-            }
-            else
-            {
-                filterExpression = a => true;
-            }
-            var albums = await repo.Filtra(filterExpression);
+            var albums = await GetAlbumsBySearchString(searchString);
             return View(albums);
         }
 
         public async Task<IActionResult> AlbumesPorCancion(string searchString)
         {
-            Expression<Func<Albumes, bool>> filterExpression;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                filterExpression = a => a.Titulo!.StartsWith(searchString);
-            }
-            else
-            {
-                filterExpression = a => true;
-            }
-            var albums = await repo.Filtra(filterExpression);
+            var albums = await GetAlbumsBySearchString(searchString);
             return View(albums);
         }
 
-        // GET: Albumes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
-
             return View(album);
         }
 
-        // GET: Albumes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Albumes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Genero,Fecha,Titulo")] Albumes album)
@@ -77,16 +52,13 @@ namespace MusicProjectApp.Controllers
             return View(album);
         }
 
-        // GET: Albumes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
-
             return View(album);
         }
 
-        // POST: Albumes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Genero,Fecha,Titulo")] Albumes album)
@@ -101,22 +73,33 @@ namespace MusicProjectApp.Controllers
             return View(album);
         }
 
-        // GET: Albumes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             var album = await GetVerifiedAlbum(id);
             if (album == null) return NotFound();
-
-            return View(album);        
+            return View(album);
         }
 
-        // POST: Albumes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await repo.Borrar(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<IEnumerable<Albumes>> GetAlbumsBySearchString(string? searchString)
+        {
+            Expression<Func<Albumes, bool>> filterExpression;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                filterExpression = a => a.Titulo!.StartsWith(searchString);
+            }
+            else
+            {
+                filterExpression = a => true;
+            }
+            return await repo.Filtra(filterExpression);
         }
     }
 }
