@@ -1,50 +1,56 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
+using MusicProjectApp.Services.Repositorio;
 
-namespace MusicProjectApp.Services.Repositorio
+
+namespace PruebaMVC.Services.Repositorio
 {
-    public class EfGenericRepositorio<T>(GrupoAContext context) : IGenericRepositorio<T>
-        where T : class
+    public class EFGenericRepositorio<T> : IGenericRepositorio<T> where T : class
     {
-        public async Task<bool> Agregar(T element)
+        private readonly IConfiguration _configuration;
+
+        public EFGenericRepositorio(IConfiguration configuracion)
         {
-            await context.Set<T>().AddAsync(element);
-            await context.SaveChangesAsync();
+            _context = new(configuracion);
+        }
+
+        private readonly GrupoAContext _context;
+        public async Task<List<T>> DameTodos()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+
+        public async Task<T?> DameUno(int Id)
+        {
+            return await _context.Set<T>().FindAsync(Id);
+        }
+
+        public async Task<bool> Borrar(int Id)
+        { 
+            var elemento = await DameUno(Id);
+            if (elemento != null) _context.Set<T>().Remove(elemento);
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> Borrar(int id)
+        public async Task<bool> Agregar(T element)
         {
-            var entity = await DameUno(id);
-            if (entity != null)
-            {
-                context.Set<T>().Remove(entity);
-                await context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            await _context.Set<T>().AddAsync(element);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<List<T>> DameTodos()
+        public async Task Modificar(int Id, T element)
         {
-            return await context.Set<T>().ToListAsync();
-        }
-
-        public async Task<T?> DameUno(int id)
-        {
-            return await context.Set<T>().FindAsync(id);
+            _context.Entry(element).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<T>> Filtra(Expression<Func<T, bool>> predicado)
         {
-            return await context.Set<T>().Where(predicado).ToListAsync();
-        }
-
-        public async Task Modificar(int id, T element)
-        {
-            context.Set<T>().Update(element);
-            await context.SaveChangesAsync();
+            return await _context.Set<T>().Where<T>(predicado).ToListAsync();
         }
     }
 }
