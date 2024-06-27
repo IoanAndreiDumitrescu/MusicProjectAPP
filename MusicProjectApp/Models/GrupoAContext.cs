@@ -18,7 +18,7 @@ namespace MusicProjectApp.Models
                     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                     .AddJsonFile("appsettings.json")
                     .Build();
-                var connectionString = configuration.GetConnectionString("MyDatabaseTest");
+                var connectionString = configuration.GetConnectionString("MyDatabase");
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }
