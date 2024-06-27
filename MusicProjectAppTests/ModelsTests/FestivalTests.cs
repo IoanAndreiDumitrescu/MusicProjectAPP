@@ -8,9 +8,14 @@ namespace MusicProjectAppTests.ModelsTests
         [TestMethod]
         public void Test_Festival_Creation()
         {
+            
             // Arrange
             var festival = new Festival
             {
+                Artista = new Artistas
+                {
+                    Nombre = "Metalica"
+                },
                 Id = 1,
                 Nombre = "Test Festival",
                 ArtistaId = 2,
@@ -20,6 +25,7 @@ namespace MusicProjectAppTests.ModelsTests
             };
 
             // Act
+            var artista = festival.Artista.Nombre;
             var id = festival.Id;
             var nombre = festival.Nombre;
             var artistaId = festival.ArtistaId;
@@ -29,6 +35,7 @@ namespace MusicProjectAppTests.ModelsTests
 
             // Assert
             Assert.AreEqual(1, id);
+            Assert.AreEqual("Metalica", artista);
             Assert.AreEqual("Test Festival", nombre);
             Assert.AreEqual(2, artistaId);
             Assert.AreEqual("Test City", ciudad);
