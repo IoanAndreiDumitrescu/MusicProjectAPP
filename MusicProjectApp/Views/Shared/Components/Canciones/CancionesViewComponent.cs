@@ -13,6 +13,7 @@ namespace MusicProjectApp.Views.Shared.Components.Canciones
             if (especificacion is not null)
                 coleccionInicial = coleccionInicial.Where(especificacion.IsValid).ToList();
             foreach (var elemento in coleccionInicial)
+
             {
                 var artista = await colArt.DameUno((int)elemento.ArtistaId!);
                 if (elemento.Artista != null) elemento.Artista.Nombre = artista!.Nombre;
