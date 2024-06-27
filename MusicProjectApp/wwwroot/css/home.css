@@ -1,0 +1,51 @@
+﻿body {
+    background-image: url('../images/background-home.jpeg');
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+.display-4,
+.card-title {
+    color: #333;
+}
+
+.lead,
+.card-text {
+    color: #555;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 #000000;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    height: 500px;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 #000000;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card-body {
+    background-color: #f8f8f8;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-primary {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-primary:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+    color: white;
+}

@@ -1,45 +1,32 @@
-﻿/* in ~/css/header.css */
-.navbar-brand img {
-    height: 100%;
-    max-height: 50px;
+﻿body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*This helps dimensions (like width and height) to include content, padding and border, but not the margin.*/
 }
 
-
-body {
-    background-color: #1E1E1E;
-    color: #fff;
-}
-
-.navbar {
-    background-color: #181818;
-}
-
-.nav-item a {
-    color: #fff;
-    transition: color 0.5s ease-in-out;
-}
-
-    .nav-item a:hover {
-        color: #1DB954; /* Spotify green color */
-    }
-
-header,
-footer {
-    background-color: #2B2B2B;
-    color: #fff;
-}
-
+/* General container for body content */
 .container {
-    background-color: #333;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 20px;
+    width: 80%; /* This means it occupies 80% of the viewport width. */
+    margin: 0 auto; /* This centers the container. Change values as needed.*/
 }
 
-a {
-    color: #1DB954;
+/* Styles for the Navbar */
+.navbar {
+    display: flex; /* This creates a flex container which helps align child items.*/
+    justify-content: space-between; /* This evenly distributes items along the axis.*/
+    padding: 20px 0; /* Increase/decrease this value to increase/decrease spacing */
 }
 
-    a:hover {
-        color: #fff;
-    }
+/* Styles for the main content */
+.main {
+    margin: 20px 0; /* Increase/decrease this value to increase/decrease spacing */
+}
+
+/* Styles for the footer */
+.footer {
+    position: fixed; /* This makes the footer stay at the bottom of the page.*/
+    left: 0; /* Aligns the footer to start from left 0 */
+    bottom: 0; /* Aligns the footer to start from bottom 0 */
+    width: 100%; /* The footer occupies the full width*/
+    text-align: center; /* Centers the footer content */
+}

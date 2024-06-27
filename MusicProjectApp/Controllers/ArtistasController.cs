@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
 using System.Linq.Expressions;
@@ -26,12 +25,29 @@ namespace MusicProjectApp.Controllers
             return View(artista);
         }
 
+        public async Task<IActionResult> CancionesPorArtista(string searchString)
+        {
+            Expression<Func<Artistas, bool>> filterExpression;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                filterExpression = a => a.Nombre.StartsWith(searchString);
+            }
+            else
+            {
+                filterExpression = a => true;
+            }
+            var artista = await repo.Filtra(filterExpression);
+
+            return View(artista);
+        }
+
         // GET: Artistas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await repo.DameUno(id.Value);
+            Artistas? artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -61,7 +77,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await repo.DameUno(id.Value);
+            Artistas? artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -88,7 +104,7 @@ namespace MusicProjectApp.Controllers
         {
             if (id == null) return NotFound();
 
-            Artistas artista = await repo.DameUno(id.Value);
+            Artistas? artista = await repo.DameUno(id.Value);
             if (artista == null) return NotFound();
 
             return View(artista);
@@ -99,7 +115,7 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var artista = await repo.Borrar(id);
+            await repo.Borrar(id);
             return RedirectToAction("Index");
         }
     }

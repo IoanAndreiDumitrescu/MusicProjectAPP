@@ -1,5 +1,5 @@
 ﻿body {
-    background-color: #F8DED1; /* light pastel peach */
+    background-image: url('/images/background.png');
     color: #084C61; /* dark blue */
 }
 
@@ -39,10 +39,11 @@ a {
 
 .table {
     border-radius: 5px;
+    box-shadow: 2px 2px 5px #000000;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
 
-    .table th {
+.table th {
         background-color: #76A08A; /* pastel sea green */
         color: #084C61; /* dark blue */
     }

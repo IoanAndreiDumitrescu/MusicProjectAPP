@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using MusicProjectApp.Services.Specifications.Canciones
+@model IEnumerable<MusicProjectApp.Models.Albumes>
+
+@{
+    ViewData["Title"] = "AlbumesPorCancion";
+}
+
+<link href="~/css/album-index.css" rel="stylesheet" />
+
+<form asp-controller="Albumes" asp-action="AlbumesPorCancion" method="get">
+    <div>
+        Search By Title:
+        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+        <input type="submit" value="Search" />
+    </div>
+</form>
+
+<h1>Albumes Por Cancion</h1>
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Titulo)</th>
+        <th>@Html.DisplayNameFor(model => model.Genero)</th>
+        <th>@Html.DisplayNameFor(model => model.Fecha)</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+            <td>@Html.DisplayFor(modelItem => item.Genero)</td>
+            <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
+            <td>@await Component.InvokeAsync("Canciones",new AlbumSpecification(item.Id))</td>
+            
+        </tr>
+    }
+
+    </tbody>
+</table>
+<div></div>

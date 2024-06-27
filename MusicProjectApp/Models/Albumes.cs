@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MusicProjectApp.Models;
-
-public partial class Albumes
+﻿namespace MusicProjectApp.Models
 {
-    public int Id { get; set; }
+    public class Albumes
+    {
+        public int Id { get; init; }
 
-    public string? Genero { get; set; }
+        public string? Genero { get; init; }
 
-    public DateOnly? Fecha { get; set; }
+        public DateTime Fecha { get; init; }
 
-    public required string Titulo { get; set; }
+        public required string? Titulo { get; init; }
 
-    public virtual ICollection<Canciones> Canciones { get; set; } = [];
+        public virtual ICollection<Canciones> Canciones { get; init; } = [];
+    }
 }

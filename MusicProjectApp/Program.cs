@@ -1,16 +1,19 @@
+using System.Configuration;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using PruebaMVC.Services.Repositorio;
+using Microsoft.Extensions.Configuration;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<GrupoAContext>(
-       options => options.UseSqlServer("server=musicagrupos.database.windows.net;database=GrupoA;user=as;password=P0t@t0P0t@t0"));
-builder.Services.AddScoped(typeof(IGenericRepositorio<>), typeof(EfGenericRepositorio<>));
-builder.Services.AddScoped<IGenericRepositorio<Canciones>, EfGenericRepositorio<Canciones>>();
-builder.Services.AddScoped<IGenericRepositorio<Artistas>, EfGenericRepositorio<Artistas>>();
-builder.Services.AddScoped<IGenericRepositorio<Albumes>, EfGenericRepositorio<Albumes>>();
+builder.Services.AddDbContext<GrupoAContext>();
+builder.Services.AddScoped(typeof(IGenericRepositorio<>), typeof(EFGenericRepositorio<>));
+builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

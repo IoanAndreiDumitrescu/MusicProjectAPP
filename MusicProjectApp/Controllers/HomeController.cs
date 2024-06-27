@@ -1,23 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicProjectApp.Models;
 using System.Diagnostics;
-
 namespace MusicProjectApp.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger) : Controller
+    public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger = logger;
-
+        public ILogger<HomeController> Logger { get; }
+        public HomeController(ILogger<HomeController> logger)
+        {
+            Logger = logger;
+        }
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
