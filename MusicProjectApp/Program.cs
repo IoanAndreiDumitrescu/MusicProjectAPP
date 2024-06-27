@@ -13,6 +13,14 @@ builder.Services.AddAuthorization(); // Adding authorization services to the app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+/*
+ * it can have multiple meanings, but in general what they probably
+ * mean is a CI/CD pipeline which is sort of a process where code goes
+ * from repository all the way to production, meaning there is a tool
+ * that takes the code, builds it, runs tests, then some other tool may
+ * be runs other tests and another tool deploys the code to the cloud,
+ * or to your own server. And this set of tools and processes is called a pipeline.
+ */
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
