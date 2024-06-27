@@ -11,6 +11,7 @@ namespace MusicProjectAppTests.ModelsTests
             // Arrange
             var artist = new Artistas
             {
+                
                 Id = 1,
                 Nombre = "Test Artist",
                 Genero = "Rock",

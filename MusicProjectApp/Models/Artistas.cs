@@ -13,5 +13,7 @@
         public virtual ICollection<Canciones> Canciones { get; set; } = [];
 
         public virtual ICollection<Festival> Festival { get; set; } = [];
+
+        
     }
 }

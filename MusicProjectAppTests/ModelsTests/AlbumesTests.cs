@@ -11,6 +11,7 @@ namespace MusicProjectAppTests.ModelsTests
             // Arrange
             var album = new Albumes
             {
+               
                 Id = 10,
                 Genero = "Rock",
                 Fecha = DateTime.Now,
@@ -18,12 +19,14 @@ namespace MusicProjectAppTests.ModelsTests
             };
 
             // Act
+            var canciones = album.Canciones;
             var id = album.Id;
             var genero = album.Genero;
             var fecha = album.Fecha;
             var titulo = album.Titulo;
 
             // Assert
+          
             Assert.AreEqual(10, id);
             Assert.AreEqual("Rock", genero);
             Assert.AreEqual("Test Album", titulo);
