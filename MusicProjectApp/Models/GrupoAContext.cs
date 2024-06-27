@@ -2,9 +2,15 @@
 
 namespace MusicProjectApp.Models
 {
-    public partial class GrupoAContext(DbContextOptions<GrupoAContext> options)
-        : DbContext(options)
+    public partial class GrupoAContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+        public GrupoAContext(IConfiguration configuracion)
+        {
+            this._configuration = configuracion;
+            this.OnConfiguring(new DbContextOptionsBuilder());
+        }
+        
         public virtual DbSet<Albumes> Albumes { get; set; }
         public virtual DbSet<Artistas> Artistas { get; set; }
         public virtual DbSet<Canciones> Canciones { get; set; }
