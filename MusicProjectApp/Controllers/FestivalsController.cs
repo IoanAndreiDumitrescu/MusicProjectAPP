@@ -5,17 +5,12 @@ using MusicProjectApp.Models;
 
 namespace MusicProjectApp.Controllers
 {
-    public class FestivalsController : Controller
+    public class FestivalsController(GrupoAContext context) : Controller
     {
-        private readonly GrupoAContext _context;
-        public FestivalsController(GrupoAContext context)
-        {
-            _context = context;
-        }
         // GET: Festivals
         public async Task<IActionResult> Index()
         {
-            var grupoAContext = _context.Festival.Include(f => f.Artista);
+            var grupoAContext = context.Festival.Include(f => f.Artista);
             return View(await grupoAContext.ToListAsync());
         }
         // GET: Festivals/Details/5
@@ -25,7 +20,7 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-            var festival = await _context.Festival
+            var festival = await context.Festival
                 .Include(f => f.Artista)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (festival == null)
@@ -37,7 +32,7 @@ namespace MusicProjectApp.Controllers
         // GET: Festivals/Create
         public IActionResult Create()
         {
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre");
+            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre");
             return View();
         }
         // POST: Festivals/Create
@@ -49,11 +44,11 @@ namespace MusicProjectApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(festival);
-                await _context.SaveChangesAsync();
+                context.Add(festival);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", festival.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre", festival.ArtistaId);
             return View(festival);
         }
         // GET: Festivals/Edit/5
@@ -63,12 +58,12 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-            var festival = await _context.Festival.FindAsync(id);
+            var festival = await context.Festival.FindAsync(id);
             if (festival == null)
             {
                 return NotFound();
             }
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", festival.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre", festival.ArtistaId);
             return View(festival);
         }
         // POST: Festivals/Edit/5
@@ -86,8 +81,8 @@ namespace MusicProjectApp.Controllers
             {
                 try
                 {
-                    _context.Update(festival);
-                    await _context.SaveChangesAsync();
+                    context.Update(festival);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -102,7 +97,7 @@ namespace MusicProjectApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistaId"] = new SelectList(_context.Artistas, "Id", "Nombre", festival.ArtistaId);
+            ViewData["ArtistaId"] = new SelectList(context.Artistas, "Id", "Nombre", festival.ArtistaId);
             return View(festival);
         }
         // GET: Festivals/Delete/5
@@ -112,7 +107,7 @@ namespace MusicProjectApp.Controllers
             {
                 return NotFound();
             }
-            var festival = await _context.Festival
+            var festival = await context.Festival
                 .Include(f => f.Artista)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (festival == null)
@@ -126,17 +121,17 @@ namespace MusicProjectApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var festival = await _context.Festival.FindAsync(id);
+            var festival = await context.Festival.FindAsync(id);
             if (festival != null)
             {
-                _context.Festival.Remove(festival);
+                context.Festival.Remove(festival);
             }
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
         private bool FestivalExists(int id)
         {
-            return _context.Festival.Any(e => e.Id == id);
+            return context.Festival.Any(e => e.Id == id);
         }
     }
 }
