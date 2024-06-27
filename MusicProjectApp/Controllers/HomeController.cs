@@ -3,13 +3,10 @@ using MusicProjectApp.Models;
 using System.Diagnostics;
 namespace MusicProjectApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger) : Controller
     {
-        public ILogger<HomeController> Logger { get; }
-        public HomeController(ILogger<HomeController> logger)
-        {
-            Logger = logger;
-        }
+        public ILogger<HomeController> Logger { get; } = logger;
+
         public IActionResult Index()
         {
             return View();

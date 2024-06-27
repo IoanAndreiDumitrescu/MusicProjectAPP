@@ -4,18 +4,12 @@ using MusicProjectApp.Models;
 
 namespace MusicProjectApp.Services.Repositorio
 {
-    public class EFGenericRepositorio<T> : IGenericRepositorio<T> where T : class
+    public class EFGenericRepositorio<T>(IConfiguration configuracion) : IGenericRepositorio<T>
+        where T : class
     {
-        private readonly IConfiguration _configuration;
-        private readonly GrupoAContext _context;
+        private readonly GrupoAContext _context = new(configuracion);
 
-        public EFGenericRepositorio(IConfiguration configuracion)
-        {
-            _configuration = configuracion;
-            _context = new(configuracion);
-        }
 
-        
         public async Task<List<T>> DameTodos()
         {
             return await _context.Set<T>().ToListAsync();
