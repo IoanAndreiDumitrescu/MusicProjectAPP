@@ -13,6 +13,7 @@ namespace MusicProjectAppTests.ModelsTests
             var festival = new Festival
             {
                 Artista = new Artistas { Nombre = "ACDC" },
+                
                 Id = 1,
                 Nombre = "Test Festival",
                 ArtistaId = 2,
@@ -38,7 +39,7 @@ namespace MusicProjectAppTests.ModelsTests
             Assert.AreEqual("Test City", ciudad);
             Assert.AreEqual(DateOnly.FromDateTime(DateTime.Today), fechaInicio);
             Assert.AreEqual(DateOnly.FromDateTime(DateTime.Today.AddDays(3)), fechaFinal);
-            Assert.AreEqual("ACDC", nombre);
+            Assert.AreEqual("ACDC", artista);
         }
     }
 }
