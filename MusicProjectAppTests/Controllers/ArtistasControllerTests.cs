@@ -43,10 +43,38 @@ namespace MusicProjectApp.Controllers.Tests
         }
 
         [TestMethod]
-        public void CancionesPorArtistaTest()
+        public async Task CancionesPorArtistaTest_WithSearchString()
         {
-            Assert.Inconclusive();
-            // TODO: Implement test
+            // Arrange
+            var expectedArtistName = "Test Artist";
+            _mockRepo.Setup(repo => repo.Filtra(It.IsAny<Expression<Func<Artistas, bool>>>()))
+                .ReturnsAsync(new List<Artistas> { new Artistas { Nombre = expectedArtistName } });
+
+            // Act
+            var result = await _controller.CancionesPorArtista("Test");
+
+            // Assert
+            Assert.IsNotNull(result);
+            var viewResult = result as ViewResult;
+            var model = viewResult.Model as List<Artistas>;
+            Assert.IsTrue(model!.Any(item => item.Nombre.Contains(expectedArtistName)));
+        }
+
+        [TestMethod]
+        public async Task CancionesPorArtistaTest_WithoutSearchString()
+        {
+            // Arrange
+            _mockRepo.Setup(repo => repo.Filtra(It.IsAny<Expression<Func<Artistas, bool>>>()))
+                .ReturnsAsync(new List<Artistas> { new Artistas { Nombre = "Any Artist" } });
+
+            // Act
+            var result = await _controller.CancionesPorArtista(string.Empty);
+
+            // Assert
+            Assert.IsNotNull(result);
+            var viewResult = result as ViewResult;
+            var model = viewResult.Model as List<Artistas>;
+            Assert.IsTrue(model.Any(item => item.Nombre.Contains("Any Artist")));
         }
 
         [TestMethod]
@@ -66,10 +94,44 @@ namespace MusicProjectApp.Controllers.Tests
         }
 
         [TestMethod]
-        public void CreateTest()
+        public void CreateGetTest()
         {
-            // TODO: Implement test
-            Assert.Inconclusive();
+            // Act
+            var result = _controller.Create();
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public async Task CreatePost_ValidModelStateTest()
+        {
+            // Arrange
+            var artist = new Artistas { Nombre = "Test Artist", Genero = "Rock", Fecha = DateTime.Now };
+            _mockRepo.Setup(repo => repo.Agregar(It.IsAny<Artistas>()));
+
+            // Act
+            var result = await _controller.Create(artist) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.ActionName);
+        }
+
+        [TestMethod]
+        public async Task CreatePost_InvalidModelStateTest()
+        {
+            // Arrange
+            var artist = new Artistas { Nombre = "Test Artist", Genero = "Rock", Fecha = DateTime.Now };
+            _controller.ModelState.AddModelError("FakeError", "FakeError for test");
+
+            // Act
+            var result = await _controller.Create(artist) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            var model = result.Model as Artistas;
+            Assert.AreEqual("Test Artist", model.Nombre);
         }
 
         [TestMethod]
@@ -112,7 +174,7 @@ namespace MusicProjectApp.Controllers.Tests
             _mockRepo.Setup(repo => repo.Borrar(It.IsAny<int>())).Callback((int id) =>
             {
                 var artist = _artists.Find(a => a.Id == id);
-                _artists.Remove(artist);
+                _artists.Remove(artist!);
             });
 
             // Act
