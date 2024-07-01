@@ -16,15 +16,8 @@ namespace MusicProjectApp.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-                var connectionString = configuration.GetConnectionString("MyDatabase");
-                optionsBuilder.UseSqlServer(connectionString);
-            }
+            var cadena = this._configuration.GetConnectionString("MyDatabase");
+            optionsBuilder.UseSqlServer(cadena);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

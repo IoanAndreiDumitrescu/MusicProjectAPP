@@ -1,62 +1,73 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using MusicProjectApp.Controllers;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 
-//namespace MusicProjectApp.Controllers.Tests
-//{
-//    [TestClass()]
-//    public class FestivalsControllerTests
-//    {
-//        [TestMethod()]
-//        public void IndexTest()
-//        {
-//            Assert.Fail();
-//        }
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MusicProjectApp.Controllers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//        [TestMethod()]
-//        public void DetailsTest()
-//        {
-//            Assert.Fail();
-//        }
+namespace MusicProjectApp.Controllers.Tests
+{
+    [TestClass()]
+    public class FestivalsControllerTests
+    {
+        public static IConfiguration InitConfiguration()
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json")
+                .AddEnvironmentVariables()
+                .Build();
+            return config;
+        }
+        [TestMethod()]
+        public void IndexTest()
+        {
 
-//        [TestMethod()]
-//        public void CreateTest()
-//        {
-//            Assert.Fail();
-//        }
+        }
 
-//        [TestMethod()]
-//        public void CreateTest1()
-//        {
-//            Assert.Fail();
-//        }
+        [TestMethod()]
+        public void DetailsTest()
+        {
 
-//        [TestMethod()]
-//        public void EditTest()
-//        {
-//            Assert.Fail();
-//        }
+        }
 
-//        [TestMethod()]
-//        public void EditTest1()
-//        {
-//            Assert.Fail();
-//        }
+        [TestMethod()]
+        public void CreateTest()
+        {
 
-//        [TestMethod()]
-//        public void DeleteTest()
-//        {
-//            Assert.Fail();
-//        }
+        }
 
-//        [TestMethod()]
-//        public void DeleteConfirmedTest()
-//        {
-//            Assert.Fail();
-//        }
-//    }
-//}
+        [TestMethod()]
+        public void CreateTest1()
+        {
+
+        }
+
+        [TestMethod()]
+        public void EditTest()
+        {
+
+        }
+
+        [TestMethod()]
+        public void EditTest1()
+        {
+
+        }
+
+        [TestMethod()]
+        public void DeleteTest()
+        {
+
+        }
+
+        [TestMethod()]
+        public void DeleteConfirmedTest()
+        {
+
+        }
+    }
+}
+
