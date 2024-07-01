@@ -65,6 +65,13 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void CreateTest()
         {
+            var result = miControladoAProbar.Create() as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Create", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var artista = result.ViewData.Model as Artistas;
+            Assert.IsNotNull(artista);
+            Assert.AreEqual("Artista Test", artista.Nombre);
 
         }
 
@@ -77,12 +84,25 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void EditTest()
         {
-
+            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaArtistas = result.ViewData.Model as Artistas;
+            Assert.IsNotNull(listaArtistas);
+            Assert.AreEqual("Lista de artistas", listaArtistas.Nombre);
         }
 
         [TestMethod()]
         public void EditTest1()
         {
+            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaArtistas = result.ViewData.Model as Artistas;
+            Assert.IsNotNull(listaArtistas);
+            Assert.AreEqual("Lista de artistas", listaArtistas.Nombre);
 
         }
 
@@ -103,6 +123,9 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void DeleteConfirmedTest()
         {
+            var result = miControladoAProbar.DeleteConfirmed(1).Result as ViewResult;
+
+            Assert.IsNull(result);
 
         }
     }

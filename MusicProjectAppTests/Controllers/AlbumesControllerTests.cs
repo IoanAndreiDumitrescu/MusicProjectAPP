@@ -8,7 +8,7 @@ using MusicProjectApp.Services.Repositorio;
 namespace MusicProjectApp.Controllers.Tests
 {
     [TestClass()]
-    public class AlbumesControllerTests
+    public class  AlbumesControllerTests
     {
         public static IConfiguration InitConfiguration()
         {
@@ -71,13 +71,27 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void EditTest()
         {
-            
+            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaAlbumes= result.ViewData.Model as Albumes;
+            Assert.IsNotNull(listaAlbumes);
+            Assert.AreEqual("Lista de albumes", listaAlbumes.Titulo);
+
         }
 
         [TestMethod()]
         public void EditTest1()
         {
-            
+            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaAlbumes = result.ViewData.Model as Albumes;
+            Assert.IsNotNull(listaAlbumes);
+            Assert.AreEqual("Lista de albumes", listaAlbumes.Titulo);
+
         }
 
         [TestMethod()]
@@ -98,6 +112,10 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void DeleteConfirmedTest()
         {
+            var result = miControladoAProbar.DeleteConfirmed(1).Result as ViewResult;
+            
+            Assert.IsNull(result);
+            
             
         }
     }

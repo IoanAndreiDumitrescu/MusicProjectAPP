@@ -69,12 +69,26 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void EditTest()
         {
+            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaCanciones = result.ViewData.Model as Canciones;
+            Assert.IsNotNull(listaCanciones);
+            Assert.AreEqual("Lista de canciones", listaCanciones.Titulo);
 
         }
 
         [TestMethod()]
         public void EditTest1()
         {
+            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaCanciones = result.ViewData.Model as Canciones;
+            Assert.IsNotNull(listaCanciones);
+            Assert.AreEqual("Lista de canciones", listaCanciones.Titulo);
 
         }
 
@@ -96,7 +110,9 @@ namespace MusicProjectApp.Controllers.Tests
         [TestMethod()]
         public void DeleteConfirmedTest()
         {
+            var result = miControladoAProbar.DeleteConfirmed(1).Result as ViewResult;
 
+            Assert.IsNull(result);
         }
     }
 }
