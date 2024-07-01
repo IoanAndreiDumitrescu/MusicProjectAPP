@@ -21,6 +21,8 @@ namespace MusicProjectApp.Controllers
             var albums = await GetAlbumsBySearchString(searchString);
             return View(albums);
         }
+        
+        
 
         public async Task<IActionResult> AlbumesPorCancion(string searchString)
         {

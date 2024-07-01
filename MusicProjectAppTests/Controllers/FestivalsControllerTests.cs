@@ -1,3 +1,4 @@
+
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicProjectApp.Controllers;
@@ -69,3 +70,4 @@ namespace MusicProjectApp.Controllers.Tests
         }
     }
 }
+

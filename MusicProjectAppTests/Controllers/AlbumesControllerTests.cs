@@ -1,4 +1,4 @@
-﻿////using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -120,5 +120,3 @@ namespace MusicProjectApp.Controllers.Tests
         }
     }
 }
-
-

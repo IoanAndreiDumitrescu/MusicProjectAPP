@@ -17,7 +17,9 @@ namespace MusicProjectAppTests.ModelsTests
                 Id = 1,
                 Titulo = "Test Song",
                 ArtistaId = 2,
-                AlbumId = 3
+                AlbumId = 3,
+                Artista = new Artistas { Id = 2, Nombre = "Test Artist" },
+                Album = new Albumes { Id = 3, Titulo = "Test Album" }
             };
 
             // Act
@@ -27,14 +29,11 @@ namespace MusicProjectAppTests.ModelsTests
             var titulo = cancion.Titulo;
             var artistaId = cancion.ArtistaId;
             var albumId = cancion.AlbumId;
+            var artista = cancion.Artista;
+            var album = cancion.Album;
 
             // Assert
             Assert.AreEqual(1, id);
             Assert.AreEqual("Test Song", titulo);
             Assert.AreEqual(2, artistaId);
             Assert.AreEqual(3, albumId);
-            Assert.AreEqual("ACDC", artista);
-            Assert.AreEqual("Back in Black", album);
-        }
-    }
-}

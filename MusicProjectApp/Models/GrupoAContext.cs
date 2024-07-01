@@ -4,10 +4,8 @@ namespace MusicProjectApp.Models
 {
     public partial class GrupoAContext : DbContext
     {
-        private readonly IConfiguration _configuration;
         public GrupoAContext(IConfiguration configuracion)
         {
-            this._configuration = configuracion;
             this.OnConfiguring(new DbContextOptionsBuilder());
         }
         
