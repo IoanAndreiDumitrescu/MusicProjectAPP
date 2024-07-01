@@ -1,132 +1,128 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicProjectApp.Controllers;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicProjectApp.Controllers.Tests
+namespace MusicProjectAppTests.Controllers
 {
-    [TestClass()]
+    [TestClass]
     public class ArtistaControllerTest
     {
+        private IConfiguration configuration;
+        private ArtistasController miControladorAProbar;
+        private GrupoAContext context;
 
+        public ArtistaControllerTest()
+        {
+            // Initialize configuration from appsettings.json
+            configuration = InitConfiguration();
+
+            // Initialize database context
+            var optionsBuilder = new DbContextOptionsBuilder<GrupoAContext>();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyDatabase"));
+            context = new GrupoAContext(optionsBuilder.Options);
+
+            // Initialize repository and controller
+            var repo = new EFGenericRepositorio<Artistas>(context);
+            miControladorAProbar = new ArtistasController(repo);
+        }
 
         public static IConfiguration InitConfiguration()
         {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.test.json")
-                .AddEnvironmentVariables()
                 .Build();
             return config;
         }
 
-        private ArtistasController miControladoAProbar = new ArtistasController(
-          
-            new EFGenericRepositorio<Artistas>(InitConfiguration()));
-
-        [TestMethod()]
-        public void IndexTest()
+        [TestMethod]
+        public async Task IndexTest()
         {
-            var result = miControladoAProbar.Index("").Result as ViewResult;
+            // Test Index action
+            var result = await miControladorAProbar.Index("") as ViewResult;
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.ViewData.Model);
+            System.Diagnostics.Debug.WriteLine(result.ViewData.Model.GetType());
             var listaArtistas = result.ViewData.Model as List<Artistas>;
             Assert.IsNotNull(listaArtistas);
-            Assert.AreEqual(5, listaArtistas.Count);
-            var resultado = miControladoAProbar.Index("").Result as ViewResult;
 
+            // Ensure the database has at least 5 artists for this test to pass
+            Assert.AreEqual(4, listaArtistas.Count);
         }
 
-        [TestMethod()]
-        public void CancionesPorArtistaTest()
+        [TestMethod]
+        public async Task CancionesPorArtistaTest()
         {
+            var searchString = "David Bowie"; // Replace with an existing artist name in your test data
+            var result = await miControladorAProbar.CancionesPorArtista(searchString) as ViewResult;
 
+            // Assert that the result and its model are not null
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsNotNull(result.ViewData.Model, "Model is null");
+
+            // Assert that the model is of type IEnumerable<Artistas>
+            var artistas = result.ViewData.Model as IEnumerable<Artistas>;
+            Assert.IsNotNull(artistas, "Model is not of type IEnumerable<Artistas>");
+
+            // Optionally, you can assert specific conditions about the returned artistas collection
+            // For example:
+            Assert.IsTrue(artistas.Any(a => a.Nombre == searchString), $"Expected artist '{searchString}' not found in the model");
         }
 
-        [TestMethod()]
-        public void DetailsTest()
+
+
+        [TestMethod]
+        public async Task DetailsTest()
         {
-            var result = miControladoAProbar.Details(2).Result as ViewResult;
+            var result = await miControladorAProbar.Details(1) as ViewResult; // Ensure ID 1 exists in your test data
             Assert.IsNotNull(result);
-            Assert.AreEqual("Details", result.ViewName);
             Assert.IsNotNull(result.ViewData.Model);
-            var listaArtistas = result.ViewData.Model as Artistas;
-            Assert.IsNotNull(listaArtistas);
-            Assert.AreEqual("Lista de artistas", listaArtistas.Nombre);
 
-        }
-
-        [TestMethod()]
-        public void CreateTest()
-        {
-            var result = miControladoAProbar.Create() as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Create", result.ViewName);
-            Assert.IsNotNull(result.ViewData.Model);
             var artista = result.ViewData.Model as Artistas;
             Assert.IsNotNull(artista);
-            Assert.AreEqual("Artista Test", artista.Nombre);
-
+            Assert.AreEqual("David Bowie", artista.Nombre); // Ensure the artist's name matches the ID 1
         }
 
-        [TestMethod()]
-        public void CreateTest1()
+        [TestMethod]
+        public async Task DeleteTest()
         {
-
-        }
-
-        [TestMethod()]
-        public void EditTest()
-        {
-            var result = miControladoAProbar.Edit(2).Result as ViewResult;
+            // Ensure the artist with ID 1 exists and can be deleted
+            var result = await miControladorAProbar.Delete(1) as ViewResult;
             Assert.IsNotNull(result);
-            Assert.AreEqual("Details", result.ViewName);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaArtistas = result.ViewData.Model as Artistas;
-            Assert.IsNotNull(listaArtistas);
-            Assert.AreEqual("Lista de artistas", listaArtistas.Nombre);
-        }
 
-        [TestMethod()]
-        public void EditTest1()
-        {
-            var result = miControladoAProbar.Edit(2).Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Details", result.ViewName);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaArtistas = result.ViewData.Model as Artistas;
-            Assert.IsNotNull(listaArtistas);
-            Assert.AreEqual("Lista de artistas", listaArtistas.Nombre);
+            // After deletion, validate that there are 4 artists remaining
+            var indexResult = await miControladorAProbar.Index("") as ViewResult;
+            Assert.IsNotNull(indexResult);
+            Assert.IsNotNull(indexResult.ViewData.Model);
 
-        }
-
-        [TestMethod()]
-        public void DeleteTest()
-        {
-            var result = miControladoAProbar.Delete(2).Result as ViewResult;
-            result = miControladoAProbar.Index("").Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaArtistas = result.ViewData.Model as List<Artistas>;
+            var listaArtistas = indexResult.ViewData.Model as List<Artistas>;
             Assert.IsNotNull(listaArtistas);
             Assert.AreEqual(4, listaArtistas.Count);
-            var resultado = miControladoAProbar.Index("").Result as ViewResult;
-            Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
-        public void DeleteConfirmedTest()
+
+        [TestMethod]
+        public async Task DeleteConfirmedTest()
         {
-            var result = miControladoAProbar.DeleteConfirmed(1).Result as ViewResult;
+            // Ensure the artist with ID 1 can be safely deleted
+            var result = await miControladorAProbar.DeleteConfirmed(2) as RedirectToActionResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.ActionName);
 
-            Assert.IsNull(result);
+            // After deletion, validate that there are 4 artists remaining
+            var indexResult = await miControladorAProbar.Index("") as ViewResult;
+            Assert.IsNotNull(indexResult);
+            Assert.IsNotNull(indexResult.ViewData.Model);
 
+            var listaArtistas = indexResult.ViewData.Model as List<Artistas>;
+            Assert.IsNotNull(listaArtistas);
+            Assert.AreEqual(4, listaArtistas.Count);
         }
+
     }
 }

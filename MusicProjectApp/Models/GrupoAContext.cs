@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace MusicProjectApp.Models
 {
     public partial class GrupoAContext : DbContext
     {
-        public GrupoAContext(IConfiguration configuracion)
+        public GrupoAContext(DbContextOptions<GrupoAContext> options)
+            : base(options)
         {
-            this.OnConfiguring(new DbContextOptionsBuilder());
         }
-        
+
         public virtual DbSet<Albumes> Albumes { get; set; }
         public virtual DbSet<Artistas> Artistas { get; set; }
         public virtual DbSet<Canciones> Canciones { get; set; }
@@ -16,9 +17,17 @@ namespace MusicProjectApp.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var cadena = this._configuration.GetConnectionString("MyDatabase");
-            optionsBuilder.UseSqlServer(cadena);
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                var connectionString = configuration.GetConnectionString("MyDatabase");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Albumes>(entity =>

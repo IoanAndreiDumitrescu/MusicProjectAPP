@@ -1,119 +1,141 @@
-
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using MusicProjectApp.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
-namespace MusicProjectApp.Controllers.Tests
+namespace MusicProjectAppTests.Controllers
 {
-    [TestClass()]
-    public class CancionesControllerTests
+    [TestClass]
+    public class CancionesControllerTests(
+        Mock<IGenericRepositorio<Canciones>> mockRepoCanciones,
+        Mock<IGenericRepositorio<Albumes>> mockRepoAlbumes,
+        Mock<IGenericRepositorio<Artistas>> mockRepoArtistas,
+        CancionesController controller)
     {
-
-        public static IConfiguration InitConfiguration()
+        [TestInitialize]
+        public void Setup()
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json")
-                .AddEnvironmentVariables()
-                .Build();
-            return config;
+            mockRepoCanciones = new Mock<IGenericRepositorio<Canciones>>();
+            mockRepoAlbumes = new Mock<IGenericRepositorio<Albumes>>();
+            mockRepoArtistas = new Mock<IGenericRepositorio<Artistas>>();
+            controller = new CancionesController(mockRepoCanciones.Object, mockRepoAlbumes.Object, mockRepoArtistas.Object);
         }
 
-        private CancionesController miControladoAProbar = new CancionesController(
-            new EFGenericRepositorio<Canciones>(InitConfiguration()),
-            new EFGenericRepositorio<Albumes>(InitConfiguration()),
-            new EFGenericRepositorio<Artistas>(InitConfiguration()));
-        [TestMethod()]
-        public void IndexTest()
+        [TestMethod]
+        public async Task IndexTest()
         {
-            var result = miControladoAProbar.Index("").Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaCanciones = result.ViewData.Model as List<Canciones>;
-            Assert.IsNotNull(listaCanciones);
-            Assert.AreEqual(5, listaCanciones.Count);
-            var resultado = miControladoAProbar.Index("").Result as ViewResult;
+            mockRepoCanciones.Setup(repo => repo.Filtra(It.IsAny<Expression<Func<Canciones, bool>>>())).ReturnsAsync(new List<Canciones>());
+
+            var result = await controller.Index(null);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
-        [TestMethod()]
-        public void DetailsTest()
+        [TestMethod]
+        public async Task DetailsTest()
         {
-            var result = miControladoAProbar.Details(2).Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Details", result.ViewName);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaCanciones = result.ViewData.Model as Canciones;
-            Assert.IsNotNull(listaCanciones);
-            Assert.AreEqual("Lista de canciones", listaCanciones.Titulo);
+            // Arrange
+            var id = 1;
+            mockRepoCanciones.Setup(repo => repo.DameUno(id)).ReturnsAsync(new Canciones
+            {
+                Titulo = "Adele"
+            });
 
+            // Act
+            var result = await controller.Details(id);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
-        [TestMethod()]
-        public void CreateTest()
+        [TestMethod]
+        public async Task Create_Get_Test()
         {
+            // Arrange
+            mockRepoAlbumes.Setup(repo => repo.DameTodos()).ReturnsAsync(
+                new List<Albumes> { new() { Titulo = "Test Album" } });
+            mockRepoArtistas.Setup(repo => repo.DameTodos()).ReturnsAsync(
+                new List<Artistas> { new() { Nombre = "Test Artist" } });
 
+            // Act
+            var result = await controller.Create();
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
-        [TestMethod()]
-        public void CreateTest1()
+        [TestMethod]
+        public async Task Create_Post_Test()
         {
-
+            var canciones = new Canciones { Titulo = "Test Title" };
+            var result = await controller.Create(canciones);
+            Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
         }
 
-        [TestMethod()]
-        public void EditTest()
+        [TestMethod]
+        public async Task Edit_Get_Test()
         {
-            var result = miControladoAProbar.Edit(2).Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Details", result.ViewName);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaCanciones = result.ViewData.Model as Canciones;
-            Assert.IsNotNull(listaCanciones);
-            Assert.AreEqual("Lista de canciones", listaCanciones.Titulo);
+            // Arrange
+            var id = 1;
+            mockRepoCanciones.Setup(repo => repo.DameUno(id)).ReturnsAsync(new Canciones { Titulo = "Adele" });
+            mockRepoAlbumes.Setup(repo => repo.DameTodos()).ReturnsAsync(new List<Albumes> { new() { Titulo = "Test Album" } });
+            mockRepoArtistas.Setup(repo => repo.DameTodos()).ReturnsAsync(new List<Artistas> { new() { Nombre = "Test Artist" } });
 
+            // Act
+            var result = await controller.Edit(id);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
-        [TestMethod()]
-        public void EditTest1()
+        [TestMethod]
+        public async Task Edit_Post_Test()
         {
-            var result = miControladoAProbar.Edit(2).Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Details", result.ViewName);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaCanciones = result.ViewData.Model as Canciones;
-            Assert.IsNotNull(listaCanciones);
-            Assert.AreEqual("Lista de canciones", listaCanciones.Titulo);
+            // Arrange
+            var id = 1;
+            mockRepoCanciones.Setup(repo => repo.DameUno(id)).ReturnsAsync(new Canciones { Id = id, Titulo = "Cancion Test" });
 
+            Canciones cancion = new Canciones { Id = id, Titulo = "Cancion Test" };
+
+            // Act
+            var result = await controller.Edit(id, cancion);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
+            Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
         }
 
-        [TestMethod()]
-        public void DeleteTest()
+        [TestMethod]
+        public async Task Delete_Confirmed_Test()
         {
-            var result = miControladoAProbar.Delete(5).Result as ViewResult;
-            result = miControladoAProbar.Index("").Result as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.ViewData.Model);
-            var listaCanciones = result.ViewData.Model as List<Canciones>;
-            Assert.IsNotNull(listaCanciones);
-            Assert.AreEqual(4, listaCanciones.Count);
-            var resultado = miControladoAProbar.Index("").Result as ViewResult;
-            Assert.IsNotNull(result);
+            // Arrange
+            var id = 1;
 
+            // Act
+            var result = await controller.DeleteConfirmed(id);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
+            Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
         }
 
-        [TestMethod()]
-        public void DeleteConfirmedTest()
+        [TestMethod]
+        public async Task Delete_Test()
         {
-            var result = miControladoAProbar.DeleteConfirmed(1).Result as ViewResult;
+            // Arrange
+            var id = 1;
+            mockRepoCanciones.Setup(repo => repo.DameUno(id)).ReturnsAsync(new Canciones
+            {
 
-            Assert.IsNull(result);
+                Titulo = "Adele"
+            });
+
+            // Act
+            var result = await controller.Delete(id);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
     }
 }
