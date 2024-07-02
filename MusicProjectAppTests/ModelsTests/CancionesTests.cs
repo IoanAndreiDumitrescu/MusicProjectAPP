@@ -8,7 +8,6 @@ namespace MusicProjectAppTests.ModelsTests
         [TestMethod]
         public void Test_Canciones_Creation()
         {
-            // Arrange
             var cancion = new Canciones
             {
                 Id = 1,
@@ -19,7 +18,6 @@ namespace MusicProjectAppTests.ModelsTests
                 Album = new Albumes { Id = 3, Titulo = "Test Album" }
             };
 
-            // Act
             var id = cancion.Id;
             var titulo = cancion.Titulo;
             var artistaId = cancion.ArtistaId;
@@ -27,7 +25,6 @@ namespace MusicProjectAppTests.ModelsTests
             var artista = cancion.Artista;
             var album = cancion.Album;
 
-            // Assert
             Assert.AreEqual(1, id);
             Assert.AreEqual("Test Song", titulo);
             Assert.AreEqual(2, artistaId);

@@ -1,103 +1,173 @@
-using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicProjectApp.Controllers;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MusicProjectAppTests.Controllers
 {
     [TestClass]
-    public class AlbumesControllerTests
+    public class AlbumesControllerTest
     {
-        private Mock<IGenericRepositorio<Albumes>> _mockRepo;
-        private AlbumesController _controller;
-        private List<Albumes> _albums;
-        [TestInitialize]
-        public void Setup()
+        private IConfiguration configuration;
+        private AlbumesController miControladorAProbar;
+        private GrupoAContext context;
+        private IDbContextTransaction transaction;
+
+        public static IConfiguration InitConfiguration()
         {
-            _mockRepo = new Mock<IGenericRepositorio<Albumes>>();
-            _controller = new AlbumesController(_mockRepo.Object);
-            _albums =
-            [
-                new() { Id = 1, Titulo = "Test Album 1" },
-                new() { Id = 2, Titulo = "Test Album 2" }
-            ];
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+            return config;
         }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            configuration = InitConfiguration();
+            var optionsBuilder = new DbContextOptionsBuilder<GrupoAContext>();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyDatabase"));
+            context = new GrupoAContext(optionsBuilder.Options);
+            transaction = context.Database.BeginTransaction();
+            var repo = new EFGenericRepositorio<Albumes>(context);
+            miControladorAProbar = new AlbumesController(repo);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            transaction.Rollback();
+            context.Dispose();
+        }
+
         [TestMethod]
         public async Task IndexTest()
         {
-            // Arrange
-            _mockRepo.Setup(repo => repo.Filtra(It.IsAny<Expression<Func<Albumes, bool>>>()))
-                .ReturnsAsync(_albums);
+           
+            var result = await miControladorAProbar.Index(string.Empty) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ViewData.Model);
+            var listaAlbums = result.ViewData.Model as List<Albumes>;
+            Assert.IsNotNull(listaAlbums);
 
-            // Act
-            // Call the actual method you are testing here 
-            var result = await _controller.Index(null);
-
-            // Assert
-            Assert.IsNotNull(result, "Result is null");
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult, "Result is not a ViewResult");
-            var model = viewResult.Model as List<Albumes>;
-            Assert.IsNotNull(model, "Model is null");
-            Assert.AreEqual(2, model.Count);
+            
         }
 
         [TestMethod]
         public async Task DetailsTest()
         {
-            // Arrange
-            _mockRepo.Setup(repo => repo.DameUno(It.IsAny<int>())).ReturnsAsync((int id) => _albums.Find(a => a.Id == id));
-            // Act
-            var result = await _controller.Details(1);
-            // Assert
-            var viewResult = result as ViewResult;
-            var model = viewResult.Model as Albumes;
-            Assert.AreEqual("Test Album 1", model.Titulo);
-        }
-        [TestMethod]
-        public async Task CreateTest()
-        {
-            // Arrange
-            var newAlbum = new Albumes { Id = 3, Titulo = "Test Album 3" };
-            _mockRepo.Setup(repo => repo.Agregar(It.IsAny<Albumes>())).Callback((Albumes a) => _albums.Add(a));
-            // Act
-            await _controller.Create(newAlbum);
-            // Assert
-            Assert.AreEqual(3, _albums.Count);
-            Assert.AreEqual("Test Album 3", _albums[2].Titulo);
-        }
-        [TestMethod]
-
-        public async Task EditTest()
-        {
-            // Arrange
-            var updatedAlbum = new Albumes { Id = 1, Titulo = "Updated Album" };
-            _mockRepo.Setup(repo => repo.Modificar(It.IsAny<int>(), It.IsAny<Albumes>())).Callback((int id, Albumes a) =>
-            {
-                var albumIndex = _albums.FindIndex(x => x.Id == id);
-                _albums[albumIndex] = a;  // Replace the album with the updated one
-            });
-            // Act
-            await _controller.Edit(1, updatedAlbum);
-            // Assert
-            Assert.AreEqual("Updated Album", _albums.First().Titulo);
+            var result = await miControladorAProbar.Details(1) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ViewData.Model);
+            var album = result.ViewData.Model as Albumes;
+            Assert.IsNotNull(album);
         }
 
         [TestMethod]
-        public async Task DeleteTest()
+        public async Task CreateGetTest()
         {
-            // Arrange
-            _mockRepo.Setup(repo => repo.Borrar(It.IsAny<int>())).Callback((int id) =>
+            var result = miControladorAProbar.Create() as ViewResult;
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public async Task CreatePostTest()
+        {
+            Albumes newAlbum = new Albumes
             {
-                var album = _albums.Find(a => a.Id == id);
-                _albums.Remove(album);
-            });
-            // Act
-            await _controller.DeleteConfirmed(1);
-            // Assert
-            Assert.AreEqual(1, _albums.Count);
+                Titulo = "New Album Title"
+            };
+
+            var result = await miControladorAProbar.Create(newAlbum) as RedirectToActionResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.ActionName);
+
+            Albumes retrievedAlbum = context.Albumes.FirstOrDefault(a => a.Titulo == newAlbum.Titulo);
+            Assert.IsNotNull(retrievedAlbum);
+            Assert.AreEqual(newAlbum.Titulo, retrievedAlbum.Titulo);
+        }
+
+        [TestMethod]
+        public async Task EditGetTest()
+        {
+            var testAlbumId = 1;
+            var result = await miControladorAProbar.Edit(testAlbumId) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+            Assert.IsInstanceOfType(result.Model, typeof(Albumes));
+
+            var album = result.Model as Albumes;
+            Assert.AreEqual(testAlbumId, album.Id);
+        }
+
+        [TestMethod]
+        public async Task EditPostTest()
+        {
+            var testAlbumId = 1;
+            var editedAlbum = new Albumes
+            {
+                Id = testAlbumId,
+                Titulo = "Edited Album Title"
+            };
+
+            var result = await miControladorAProbar.Edit(testAlbumId, editedAlbum) as RedirectToActionResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.ActionName);
+
+            var retrievedAlbum = await context.Albumes.FindAsync(testAlbumId);
+            Assert.AreEqual(editedAlbum.Titulo, retrievedAlbum.Titulo);
+        }
+
+        [TestMethod]
+        public async Task DeleteGetTest()
+        {
+            var testAlbumId = 1;
+            var result = await miControladorAProbar.Delete(testAlbumId) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+            Assert.IsInstanceOfType(result.Model, typeof(Albumes));
+
+            var album = result.Model as Albumes;
+            Assert.AreEqual(testAlbumId, album.Id);
+        }
+        [TestMethod]
+        public async Task DeletePostTest()
+        {
+            var albumToBeDeleted = await context.Albumes.FindAsync(1);
+            Assert.IsNotNull(albumToBeDeleted);
+
+            context.Canciones.RemoveRange(context.Canciones.Where(c => c.AlbumId == albumToBeDeleted.Id));
+            await context.SaveChangesAsync();
+
+            await miControladorAProbar.DeleteConfirmed(albumToBeDeleted.Id);
+
+        }
+
+        [TestMethod]
+        public async Task AlbumesPorCancionTest_ValidSongName()
+        {
+            string validSongName = "Walk This Way";
+
+            var result = await miControladorAProbar.AlbumesPorCancion(validSongName) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ViewData.Model);
+
+            var albumList = result.ViewData.Model as List<Albumes>;
+            Assert.IsNotNull(albumList);
+
+            foreach (var album in albumList)
+            {
+                Assert.IsTrue(album.Canciones.Any(song => song.Titulo == validSongName));
+            }
         }
     }
 }

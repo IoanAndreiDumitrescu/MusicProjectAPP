@@ -129,7 +129,7 @@ namespace MusicProjectApp.Controllers
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        private bool FestivalExists(int id)
+        public bool FestivalExists(int id)
         {
             return context.Festival.Any(e => e.Id == id);
         }
