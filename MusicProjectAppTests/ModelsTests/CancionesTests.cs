@@ -1,5 +1,4 @@
 ﻿using MusicProjectApp.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusicProjectAppTests.ModelsTests
 {
@@ -12,8 +11,6 @@ namespace MusicProjectAppTests.ModelsTests
             // Arrange
             var cancion = new Canciones
             {
-                Artista = new Artistas { Nombre = "ACDC" },
-                Album = new Albumes() { Titulo = "Back in Black" },
                 Id = 1,
                 Titulo = "Test Song",
                 ArtistaId = 2,
@@ -23,8 +20,6 @@ namespace MusicProjectAppTests.ModelsTests
             };
 
             // Act
-            var artista = cancion.Artista.Nombre;
-            var album = cancion.Album.Titulo;
             var id = cancion.Id;
             var titulo = cancion.Titulo;
             var artistaId = cancion.ArtistaId;
@@ -37,3 +32,12 @@ namespace MusicProjectAppTests.ModelsTests
             Assert.AreEqual("Test Song", titulo);
             Assert.AreEqual(2, artistaId);
             Assert.AreEqual(3, albumId);
+            Assert.IsNotNull(artista);
+            Assert.AreEqual(2, artista.Id);
+            Assert.AreEqual("Test Artist", artista.Nombre);
+            Assert.IsNotNull(album);
+            Assert.AreEqual(3, album.Id);
+            Assert.AreEqual("Test Album", album.Titulo);
+        }
+    }
+}

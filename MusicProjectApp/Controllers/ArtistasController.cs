@@ -19,6 +19,7 @@ namespace MusicProjectApp.Controllers
             else
             {
                 filterExpression = a => true;
+               
             }
             var artista = await repo.Filtra(filterExpression);
 
