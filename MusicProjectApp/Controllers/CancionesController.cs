@@ -155,7 +155,7 @@ namespace MusicProjectApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> CancionesExists(int id)
+        public async Task<bool> CancionesExists(int id)
         {
             var canciones = await cancionesRepo.DameUno(id);
             return canciones != null;

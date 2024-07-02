@@ -9,7 +9,6 @@ namespace MusicProjectAppTests.ModelsTests
         public void Test_Festival_Creation()
         {
             
-            // Arrange
             var festival = new Festival
             {
                 Artista = new Artistas { Nombre = "ACDC" },
@@ -22,7 +21,6 @@ namespace MusicProjectAppTests.ModelsTests
                 FechaFinal = DateOnly.FromDateTime(DateTime.Today.AddDays(3))
             };
 
-            // Act
             var artista = festival.Artista.Nombre;
             var id = festival.Id;
             var nombre = festival.Nombre;
@@ -31,7 +29,6 @@ namespace MusicProjectAppTests.ModelsTests
             var fechaInicio = festival.FechaInicio;
             var fechaFinal = festival.FechaFinal;
 
-            // Assert
             Assert.AreEqual(1, id);
             Assert.AreEqual("ACDC", artista);
             Assert.AreEqual("Test Festival", nombre);

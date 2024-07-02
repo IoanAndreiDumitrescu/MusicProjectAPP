@@ -8,7 +8,6 @@ namespace MusicProjectAppTests.ModelsTests
         [TestMethod]
         public void Test_Artistas_Creation()
         {
-            // Arrange
             var artist = new Artistas
             {
                 
@@ -20,7 +19,6 @@ namespace MusicProjectAppTests.ModelsTests
                 Festival = new List<Festival>(),
             };
 
-            // Act
             var id = artist.Id;
             var nombre = artist.Nombre;
             var genero = artist.Genero;
@@ -28,7 +26,6 @@ namespace MusicProjectAppTests.ModelsTests
             var canciones = artist.Canciones;
             var festival = artist.Festival;
 
-            // Assert
             Assert.AreEqual(1, id);
             Assert.AreEqual("Test Artist", nombre);
             Assert.AreEqual("Rock", genero);
