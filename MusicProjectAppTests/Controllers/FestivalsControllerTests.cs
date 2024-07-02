@@ -1,14 +1,7 @@
 
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MusicProjectApp.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MusicProjectApp.Controllers.Tests
+ namespace MusicProjectApp.Controllers.Tests
 {
     [TestClass()]
     public class FestivalsControllerTests

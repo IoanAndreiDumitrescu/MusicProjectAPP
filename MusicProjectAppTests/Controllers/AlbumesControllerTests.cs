@@ -1,13 +1,11 @@
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MusicProjectApp.Controllers;
 using MusicProjectApp.Models;
 using MusicProjectApp.Services.Repositorio;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-namespace MusicProjectApp.Controllers.Tests
+
+namespace MusicProjectAppTests.Controllers
 {
     [TestClass]
     public class AlbumesControllerTests
