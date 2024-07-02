@@ -73,7 +73,7 @@ public class CancionesControllerTest
 
         var cancion = result.ViewData.Model as Canciones;
         Assert.IsNotNull(cancion);
-        Assert.AreEqual("Walk This Way", cancion.Titulo); // Ensure the song's title matches the ID 3
+        Assert.AreEqual("Walk This Way", cancion.Titulo); 
     }
 
     [TestMethod]

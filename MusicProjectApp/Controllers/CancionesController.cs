@@ -26,7 +26,11 @@ namespace MusicProjectApp.Controllers
             {
                 filterExpression = a => true;
             }
-            var canciones = await cancionesRepo.Filtra(filterExpression);
+
+            var canciones = await cancionesRepo.DameTodosPorCondicionConRelaciones(
+                filterExpression,
+                song => song.Artista,
+                song => song.Album);
 
             return View(canciones);
         }
@@ -40,7 +44,7 @@ namespace MusicProjectApp.Controllers
                 return NotFound();
             }
 
-            var canciones = await cancionesRepo.DameUno(id.Value);
+            var canciones = await ((EFGenericRepositorio<Canciones>)cancionesRepo).DameUnoConRelaciones(id.Value, c => c.Album, c => c.Artista);
 
             if (canciones == null)
             {
