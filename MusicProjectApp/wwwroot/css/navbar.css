@@ -1,40 +1,40 @@
 ﻿/* custom-navbar.css file content */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    padding: 16px 60px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 16px 60px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .navbar ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .navbar ul li {
-    list-style: none;
-    position: relative;
-    margin: 0 10px;
-    padding: 0 2px;
+  list-style: none;
+  position: relative;
+  margin: 0 10px;
+  padding: 0 2px;
 }
 
 .navbar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 19px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 19px;
 }
 
-.navbar ul li a::before {
+.navbar ul li a:not(.signup)::before {
     content: "";
     position: absolute;
     bottom: 0;
@@ -48,26 +48,27 @@
     transition: transform 0.4s ease-in-out;
 }
 
-.navbar ul li a:hover::before {
+.navbar ul li a:not(.signup):hover::before {
     transform: scaleX(1);
     transform-origin: bottom left;
 }
 
 .navbar-brand img {
-    width: 100px;
+  width: 150px;
 }
 
 .signup {
-    background-color: #ff416c;
-    color: #fff;
-    font-size: 18px;
-    border: none;
-    border-radius: 25px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: 0.3s ease;
+  background-color: #ff416c;
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-decoration: none;
 }
 
 .signup:hover {
-    background-color: #ff4b2b;
+  background-color: #ff4b2b;
 }
