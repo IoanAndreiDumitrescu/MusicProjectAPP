@@ -1,6 +1,7 @@
 ﻿body {
     background-image: url('../images/background-home.jpeg');
     font-family: Arial, sans-serif;
+    background-color: transparent;
 }
 
 .container {
@@ -13,6 +14,24 @@
     color: #333;
 }
 
+.display-4, .lead {
+    text-shadow: 2px 2px 4px #000000;
+    font-family: 'Georgia', sans-serif;
+    font-size: 1em;
+    text-transform: uppercase;
+    animation: fadeIn 5s;
+
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
 .lead,
 .card-text {
     color: #555;
@@ -48,4 +67,9 @@
     background-color: #138496;
     border-color: #117a8b;
     color: white;
+}
+
+.white-text {
+    color: white;
+    white-space: pre-line;
 }
