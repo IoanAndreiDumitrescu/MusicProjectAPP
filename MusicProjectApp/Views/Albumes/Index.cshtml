@@ -6,10 +6,9 @@
 }
 <link href="~/css/album-index.css" rel="stylesheet" />
 <form asp-controller="Albumes" asp-action="Index" method="get">
-    <div>
-        Search By Title:
-        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-        <input type="submit" value="Search" />
+    <div class="input-group">
+        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="search-input" placeholder="Buscar por titulo" />
+        <input type="submit" value="Buscar" class="search-btn" />
     </div>
 </form>
 

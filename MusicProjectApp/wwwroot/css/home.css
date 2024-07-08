@@ -1,13 +1,21 @@
 ﻿body {
-    background-image: url('../images/background-home.jpeg');
+    background-image: url('../images/background-headphones.jpg');
     font-family: Arial, sans-serif;
-    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: auto;
+    background-color: transparent;
 }
+
 
 .display-4,
 .card-title {
@@ -15,20 +23,30 @@
 }
 
 .display-4, .lead {
+    background-color: transparent;
     text-shadow: 2px 2px 4px #000000;
-    font-family: 'Georgia', sans-serif;
     font-size: 1em;
-    text-transform: uppercase;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 25px;
+    letter-spacing: 0.2px;
+    word-spacing: 6px;
+    color:white;
+    font-weight: 400;
+    text-decoration: overline solid rgb(68, 68, 68);
+    font-style: italic;
+    font-variant: normal;
+    text-transform: none;
     animation: fadeIn 5s;
-
 }
 
 @keyframes fadeIn {
     0% {
+        -ms-opacity: 0;
         opacity: 0;
     }
 
     100% {
+        -ms-opacity: 1;
         opacity: 1;
     }
 }
@@ -40,6 +58,9 @@
 .card {
     box-shadow: 0 4px 8px 0 #000000;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    -ms-transition: 0.3s;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
     transition: 0.3s;
     height: 500px;
 }
@@ -72,4 +93,5 @@
 .white-text {
     color: white;
     white-space: pre-line;
+
 }
