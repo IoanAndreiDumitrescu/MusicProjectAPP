@@ -39,17 +39,9 @@ namespace MusicProjectApp.Controllers
         // GET: Canciones/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var canciones = await ((EFGenericRepositorio<Canciones>)cancionesRepo).DameUnoConRelaciones(id.Value, c => c.Album, c => c.Artista);
-
-            if (canciones == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
+            var canciones = await cancionesRepo.DameUnoConRelaciones(id.Value, c => c.Album, c => c.Artista);
+            if (canciones == null) return NotFound();
 
             return View(canciones);
         }
@@ -57,8 +49,11 @@ namespace MusicProjectApp.Controllers
         // GET: Canciones/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo");
-            ViewData["ArtistaId"] = new SelectList(await artistasRepo!.DameTodos(), "Id", "Nombre");
+            var albums = await albumesRepo.DameTodos();
+            var artists = await artistasRepo!.DameTodos();
+            ViewData["AlbumId"] = new SelectList(albums, "Id", "Titulo");
+            ViewData["ArtistaId"] = new SelectList(artists, "Id", "Nombre");
+
             return View();
         }
 
@@ -80,18 +75,16 @@ namespace MusicProjectApp.Controllers
         // GET: Canciones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var canciones = await cancionesRepo.DameUno(id.Value);
-            if (canciones == null)
-            {
-                return NotFound();
-            }
-            ViewData["AlbumId"] = new SelectList(await albumesRepo.DameTodos(), "Id", "Titulo", canciones.AlbumId);
-            ViewData["ArtistaId"] = new SelectList(await artistasRepo!.DameTodos(), "Id", "Nombre", canciones.ArtistaId);
+            if (canciones == null) return NotFound();
+
+            var albums = await albumesRepo.DameTodos();
+            var artists = await artistasRepo!.DameTodos();
+            ViewData["AlbumId"] = new SelectList(albums, "Id", "Titulo", canciones.AlbumId);
+            ViewData["ArtistaId"] = new SelectList(artists, "Id", "Nombre", canciones.ArtistaId);
+
             return View(canciones);
         }
 

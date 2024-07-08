@@ -62,11 +62,13 @@
 }
 
 .navbar-brand img {
-    width: 90px;
-    animation: bounce 2s;
+    height: 200px;
+    width: 260px;
+
 }
 
 .navbar-toggler {
+    padding-top: 10%;
     border: none;
     color: #ffffff;
 }

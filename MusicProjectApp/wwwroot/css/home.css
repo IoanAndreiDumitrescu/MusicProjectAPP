@@ -11,9 +11,11 @@
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: auto;
+    background-color: transparent;
 }
+
 
 .display-4,
 .card-title {
@@ -21,12 +23,20 @@
 }
 
 .display-4, .lead {
+    background-color: transparent;
     text-shadow: 2px 2px 4px #000000;
-    font-family: 'Georgia', sans-serif;
     font-size: 1em;
-    
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 25px;
+    letter-spacing: 0.2px;
+    word-spacing: 6px;
+    color:white;
+    font-weight: 400;
+    text-decoration: overline solid rgb(68, 68, 68);
+    font-style: italic;
+    font-variant: normal;
+    text-transform: none;
     animation: fadeIn 5s;
-
 }
 
 @keyframes fadeIn {
@@ -83,4 +93,5 @@
 .white-text {
     color: white;
     white-space: pre-line;
+
 }

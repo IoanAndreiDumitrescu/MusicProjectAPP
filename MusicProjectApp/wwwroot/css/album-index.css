@@ -56,3 +56,53 @@ a:hover {
 .table td:hover { /* added hover effect */
     background-color: #C9C6F2; /* change color to pastel periwinkle when hover */
 }
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.search-input {
+    width: auto;
+    height: 35px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    box-sizing: border-box;
+}
+
+.search-btn {
+    background-color: #2A363B;
+    color: #FECEA8;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+    cursor: pointer;
+    width: auto;
+}
+
+.search-btn:hover {
+    background-color: #99B898;
+    color: #2A363B;
+}
+
+@media screen and (max-width: 600px) {
+    .search-input {
+        width: 100%; /* full width on small screens */
+        margin-bottom: 5px; /* space between input and button */
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+}
